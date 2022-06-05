@@ -41,13 +41,7 @@ class InstallData implements InstallDataInterface
         $postSetup = $this->postSetupFactory->create(['setup' => $setup]);
 
         $setup->startSetup();
-
         $postSetup->installEntities();
-        /*$entities = $postSetup->getDefaultEntities();
-        foreach ($entities as $entityName => $entity) {
-            $postSetup->addEntityType($entityName, $entity);
-        }*/
-
         $setup->endSetup();
     }
 }
