@@ -10,11 +10,14 @@ With this model, we get more featres like more easy to create new attributes, ma
 ## Instalation guide
 ```
 composer require oag/module-blog
+php bin/magento module:enable OAG_Blog # If you upload via FTP
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 php bin/magento cache:flush
 ```
+## Uninstalation guide
+You can execute command ```php bin/magento module:uninstall OAG_Blog``` to uninstall module. WARNING/TODO: We don't finish the uninstall script!
 
 ## Key Features
 TODO
