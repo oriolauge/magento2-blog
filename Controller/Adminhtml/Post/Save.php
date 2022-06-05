@@ -6,7 +6,7 @@ namespace OAG\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use OAG\Post\Model\PostFactory;
+use OAG\Blog\Model\PostFactory;
 
 class Save extends Action
 {

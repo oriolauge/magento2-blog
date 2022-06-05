@@ -2,7 +2,7 @@
 /**
  * Grid Collection
  */
-namespace OAG\Post\Model\ResourceModel\Post\Grid;
+namespace OAG\Blog\Model\ResourceModel\Post\Grid;
 
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\EntityFactory as EavEntityFactory;

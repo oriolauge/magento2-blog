@@ -8,7 +8,13 @@ With this model, we get more featres like more easy to create new attributes, ma
 - Stability: Stable Build
 
 ## Instalation guide
-TODO
+```
+composer require oag/module-blog
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy
+php bin/magento cache:flush
+```
 
 ## Key Features
 TODO
