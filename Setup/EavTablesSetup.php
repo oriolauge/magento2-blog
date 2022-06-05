@@ -7,6 +7,7 @@ namespace OAG\Blog\Setup;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use OAG\Blog\Setup\PostSetup;
 
 class EavTablesSetup
 {
@@ -30,7 +31,7 @@ class EavTablesSetup
      */
     public function createEavTables($entityCode)
     {
-        $this->createEAVMainTable($entityCode);
+        $this->createEAVMainTable();
         $this->createEntityTable($entityCode, 'datetime', Table::TYPE_DATETIME);
         $this->createEntityTable($entityCode, 'decimal', Table::TYPE_DECIMAL, '12,4');
         $this->createEntityTable($entityCode, 'int', Table::TYPE_INTEGER);
@@ -39,12 +40,35 @@ class EavTablesSetup
     }
 
     /**
+     * Drop all EAV tables
+     *
+     * @return void
+     */
+    public function dropEavTables()
+    {
+        //remove type tables
+        $tableTypes = ['datetime', 'decimal', 'int', 'text', 'varchar'];
+        foreach ($tableTypes as $type) {
+            $this->setup->getConnection()->dropTable(
+                $this->setup->getTable(PostSetup::ENTITY_TYPE_CODE . '_' . $type)
+            );
+        }
+        //remove main table
+        $this->setup->getConnection()->dropTable(
+            $this->setup->getTable(PostSetup::ENTITY_TYPE_CODE)
+        );
+        //remove eav attributes table
+		$this->setup->getConnection()->dropTable(
+            $this->setup->getTable(PostSetup::EAV_ENTITY_TYPE_CODE . '_eav_attribute')
+        );
+    }
+
+    /**
      * create eav attributes tables and add foreign keys
      */
-    protected function createEAVMainTable($entityCode)
+    protected function createEAVMainTable()
     {
-        $tableName = $entityCode . '_eav_attribute';
-        $tableName = 'oag_blog_eav_attribute';
+        $tableName = PostSetup::EAV_ENTITY_TYPE_CODE . '_eav_attribute';
 
         $table = $this->setup->getConnection()->newTable(
             $this->setup->getTable($tableName)

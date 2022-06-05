@@ -46,6 +46,22 @@ class PostSetup extends EavSetup
             'wysiwyg_enabled' => '0',
         ];
 
+        $attributes['url_key'] = [
+            'group' => 'General',
+            'type' => 'varchar',
+            'label' => 'URL key',
+            'input' => 'text',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'position' => '20',
+            'note' => '',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
         // Add your more entity attributes here...
 
         return $attributes;
@@ -58,7 +74,7 @@ class PostSetup extends EavSetup
      */
     public function getDefaultEntities()
     {
-        $entities = [
+        return [
             self::ENTITY_TYPE_CODE => [
                 'entity_model' => 'OAG\Blog\Model\ResourceModel\Post',
                 'attribute_model' => 'OAG\Blog\Model\ResourceModel\Eav\Attribute',
@@ -69,7 +85,5 @@ class PostSetup extends EavSetup
                 'attributes' => $this->getAttributes(),
             ],
         ];
-
-        return $entities;
     }
 }

@@ -14,7 +14,6 @@ use OAG\Blog\Setup\PostSetup;
 
 class InstallSchema implements InstallSchemaInterface
 {
-
     /**
      * @var EavTablesSetupFactory
      */
