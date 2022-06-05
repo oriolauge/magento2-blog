@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
+<!-- declaration module -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="OAG_Blog" setup_version="0.0.1" >
+    <module name="OAG_Blog" setup_version="0.0.1">
+        <sequence>
+            <module name="Mage_Eav" />
+        </sequence>
     </module>
 </config>
