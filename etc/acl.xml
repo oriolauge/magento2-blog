@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+Used to limit backoffice user access to OAG Blog features
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="OAG_Blog::post" title="OAG Blog Post" sortOrder="999" />
+            </resource>
+        </resources>
+    </acl>
+</config>
