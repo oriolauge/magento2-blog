@@ -10,7 +10,6 @@ use OAG\Blog\Model\PostFactory;
 
 class Save extends Action
 {
-
     /**
      * @var PostFactory
      */

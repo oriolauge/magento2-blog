@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <!-- setup collection files for UI component grid and config of collection -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="OAG\Blog\Api\UrlFinderInterface" type="OAG\Blog\Model\UrlFinder" />
+    <!-- Necessary to find and redirect to the correct url when user change store -->
+    <type name="Magento\Store\Model\StoreSwitcher">
+        <arguments>
+            <argument name="storeSwitchers" xsi:type="array">
+                <item name="oagBlogRewriteUrl" xsi:type="object">OAG\Blog\Model\StoreSwitcher\RewriteUrl</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Model\Entity\AttributeCache">
         <arguments>
             <argument name="unsupportedTypes" xsi:type="array">
