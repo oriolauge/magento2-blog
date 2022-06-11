@@ -47,9 +47,8 @@ class Router implements RouterInterface
      */
     public function match(RequestInterface $request)
     {
-        $pathInfoTrimmed = ltrim($request->getPathInfo(), '/');
+        $pathInfoTrimmed = trim($request->getPathInfo(), '/');
 
-        //var_dump($pathInfoTrimmed); die();
         /**
          * We only process this function if we have some value in
          * request, but for security reason, we will check if is

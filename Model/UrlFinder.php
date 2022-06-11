@@ -50,10 +50,9 @@ class UrlFinder implements UrlFinderInterface
     public function resolve(string $url): ?array
     {
         $urlExplode = explode('/', $url);
-        $blogRoute = $this->config->getBlogRoute();
 
         //No blog url
-        if (empty($blogRoute) || $urlExplode[0] != $blogRoute) {
+        if (!$this->isBlogUrl($urlExplode[0])) {
             return null;
         }
 
@@ -69,7 +68,7 @@ class UrlFinder implements UrlFinderInterface
         } else if (count($urlExplode) == 1) {
             //Check blog url
             $storeId = $this->storeManager->getStore()->getId();
-            $postId = $this->getPostId(array_pop($urlExplode), $storeId);
+            $postId = $this->getPostIdByUrlKey(array_pop($urlExplode), $storeId);
             if ($postId) {
                 return [
                     'controller' => 'post',
@@ -84,12 +83,32 @@ class UrlFinder implements UrlFinderInterface
     }
 
     /**
+     * Checks if url is from blog
+     *
+     * @param string $url
+     * @return boolean
+     */
+    public function isBlogUrl(string $url): bool
+    {
+        $blogRoute = $this->config->getBlogRoute();
+        if (empty($blogRoute)) {
+            return false;
+        }
+
+        if (empty($blogRoute) || $url != $blogRoute) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Return post id
      *
      * @param string $urlKey
      * @return int|null
      */
-    protected function getPostId(string $urlKey, $storeId): ?int
+    public function getPostIdByUrlKey(string $urlKey, $storeId): ?int
     {
         //remove sufix url
         $urlBlog = str_replace(

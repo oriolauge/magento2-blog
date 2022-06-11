@@ -87,7 +87,7 @@ class Post extends AbstractEntity
             'attribute_set_id',
             'entity_type_id',
             'created_at',
-            'updated_at',
+            'updated_at'
         ];
     }
 
@@ -117,6 +117,16 @@ class Post extends AbstractEntity
     }
 
     /**
+     * Returns default Store ID
+     *
+     * @return int
+     */
+    public function getDefaultStoreId()
+    {
+        return Store::DEFAULT_STORE_ID;
+    }
+
+    /**
      * Set Attribute values to be saved
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -132,7 +142,7 @@ class Post extends AbstractEntity
         }
 
         $entityIdField = $attribute->getBackend()->getEntityIdField();
-        $storeId = $object->getStoreId() ?: Store::DEFAULT_STORE_ID;
+        $storeId = $object->getStoreId() ?: $this->getDefaultStoreId();
         $data = [
             $entityIdField => $object->getId(),
             'entity_type_id' => $object->getEntityTypeId(),
@@ -168,5 +178,53 @@ class Post extends AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve select object for loading entity attributes values
+     *
+     * Join attribute store value
+     *
+     * @see \Magento\Catalog\Model\ResourceModel\AbstractResource::_getLoadAttributesSelect()
+     * @param \Magento\Framework\DataObject $object
+     * @param string $table
+     * @return \Magento\Framework\DB\Select
+     */
+    protected function _getLoadAttributesSelect($object, $table)
+    {
+        /**
+         * This condition is applicable for all cases when we was work in not single
+         * store mode, customize some value per specific store view and than back
+         * to single store mode. We should load correct values
+         */
+        if ($this->_storeManager->hasSingleStore()) {
+            $storeId = (int) $this->_storeManager->getStore(true)->getId();
+        } else {
+            $storeId = (int) $object->getStoreId();
+        }
+
+        $setId = $object->getAttributeSetId();
+        $storeIds = [$this->getDefaultStoreId()];
+        if ($storeId != $this->getDefaultStoreId()) {
+            $storeIds[] = $storeId;
+        }
+
+        $select = $this->getConnection()
+            ->select()
+            ->from(['attr_table' => $table], [])
+            ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
+            ->where('attr_table.store_id IN (?)', $storeIds, \Zend_Db::INT_TYPE);
+
+        if ($setId) {
+            $select->join(
+                ['set_table' => $this->getTable('eav_entity_attribute')],
+                $this->getConnection()->quoteInto(
+                    'attr_table.attribute_id = set_table.attribute_id' . ' AND set_table.attribute_set_id = ?',
+                    $setId
+                ),
+                []
+            );
+        }
+        return $select;
     }
 }

@@ -48,7 +48,6 @@ class View implements HttpGetActionInterface
         $postId = (int) $this->request->getParam('id');
         $page = $this->resultPageFactory->create();
 
-
         $postData = $this->postFactory->create();
         $postData->load($postId);
        
