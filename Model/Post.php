@@ -6,6 +6,11 @@ namespace OAG\Blog\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use OAG\Blog\Model\Url;
 
 class Post extends AbstractModel implements IdentityInterface
 {
@@ -26,9 +31,24 @@ class Post extends AbstractModel implements IdentityInterface
     const KEY_ATTR_TYPE_ID = 'attribute_set_id';
 
     /**
+     * Post Store Id
+     */
+    const STORE_ID = 'store_id';
+
+    /**
      * @var string
      */
     protected $_cacheTag = 'oag_blog_post';
+
+    /**
+     * @var Url
+     */
+    protected $url;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * Prefix of model events names
@@ -36,6 +56,18 @@ class Post extends AbstractModel implements IdentityInterface
      * @var string
      */
     protected $_eventPrefix = 'oag_blog_post';
+
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        Url $url,
+        StoreManagerInterface $storeManager
+    )
+    {
+        $this->url = $url;
+        $this->storeManager = $storeManager;
+        parent::__construct($context, $registry);
+    }
 
     /**
      * Initialize resource model
@@ -112,16 +144,6 @@ class Post extends AbstractModel implements IdentityInterface
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Catalog\Model\ResourceModel\Category
-     * @deprecated because resource models should be used directly
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
-    }
-
-    /**
      * Retrieve default attribute set id
      *
      * @return int
@@ -129,5 +151,23 @@ class Post extends AbstractModel implements IdentityInterface
     public function getDefaultAttributeSetId()
     {
         return $this->getResource()->getEntityType()->getDefaultAttributeSetId();
+    }
+
+    public function getUrl()
+    {
+        return $this->url->getPostUrl($this);
+    }
+
+    /**
+     * Retrieve Store Id
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        if ($this->hasData(self::STORE_ID)) {
+            return (int) $this->getData(self::STORE_ID);
+        }
+        return (int) $this->storeManager->getStore()->getId();
     }
 }
