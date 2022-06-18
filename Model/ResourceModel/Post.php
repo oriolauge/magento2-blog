@@ -13,7 +13,6 @@ use OAG\Blog\Setup\PostSetup;
 
 class Post extends AbstractEntity
 {
-
     /**
      * Store id
      *
@@ -160,7 +159,7 @@ class Post extends AbstractEntity
              * Update attribute value for store
              */
             $this->_attributeValuesToSave[$table][] = $data;
-        } elseif ($attribute->isScopeWebsite() && $storeId != Store::DEFAULT_STORE_ID) {
+        } elseif ($attribute->isScopeWebsite() && $storeId != $this->getDefaultStoreId()) {
             /**
              * Update attribute value for website
              */
@@ -173,7 +172,7 @@ class Post extends AbstractEntity
             /**
              * Update global attribute value
              */
-            $data['store_id'] = Store::DEFAULT_STORE_ID;
+            $data['store_id'] = $this->getDefaultStoreId();
             $this->_attributeValuesToSave[$table][] = $data;
         }
 
