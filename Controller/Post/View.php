@@ -1,9 +1,10 @@
 <?php
 namespace OAG\Blog\Controller\Post;
+
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\RequestInterface;
-use OAG\Blog\Model\PostFactory;
+use OAG\Blog\Api\PostRepositoryInterface;
 
 /**
  * Blog home page view
@@ -21,9 +22,9 @@ class View implements HttpGetActionInterface
     protected $resultPageFactory;
 
     /**
-     * @var PostFactory
+     * @var PostRepositoryInterface
      */
-    protected $postFactory;
+    protected $postRepository;
 
     /**
      * @param RequestInterface $request
@@ -31,12 +32,12 @@ class View implements HttpGetActionInterface
     public function __construct(
         RequestInterface $request,
         PageFactory $resultPageFactory,
-        PostFactory $postFactory
+        PostRepositoryInterface $postRepository
     )
     {
         $this->request = $request;
         $this->resultPageFactory = $resultPageFactory;
-        $this->postFactory = $postFactory;
+        $this->postRepository = $postRepository;
     }
     /**
      * View blog homepage action
@@ -48,11 +49,10 @@ class View implements HttpGetActionInterface
         $postId = (int) $this->request->getParam('id');
         $page = $this->resultPageFactory->create();
 
-        $postData = $this->postFactory->create();
-        $postData->load($postId);
+        $post = $this->postRepository->getById($postId);
        
         $block = $page->getLayout()->getBlock('oagblog_post_view_content');
-        $block->setData('custom_parameter', $postData->getMainTitle());
+        $block->setData('custom_parameter', $post->getMainTitle());
         return $page;
     }
 }

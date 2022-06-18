@@ -66,7 +66,7 @@ class Edit extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('entity_id');
+        $id = (int) $this->getRequest()->getParam('entity_id');
         $postData = $this->postFactory->create();
 
         if ($id) {

@@ -2,11 +2,22 @@
 <!-- setup collection files for UI component grid and config of collection -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="OAG\Blog\Api\UrlFinderInterface" type="OAG\Blog\Model\UrlFinder" />
+    <preference for="OAG\Blog\Api\PostRepositoryInterface" type="OAG\Blog\Model\PostRepository" />
+    <preference for="OAG\Blog\Api\Data\PostInterface" type="OAG\Blog\Model\Post" />
+
     <!-- Necessary to find and redirect to the correct url when user change store -->
     <type name="Magento\Store\Model\StoreSwitcher">
         <arguments>
             <argument name="storeSwitchers" xsi:type="array">
                 <item name="oagBlogRewriteUrl" xsi:type="object">OAG\Blog\Model\StoreSwitcher\RewriteUrl</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Define contract between API Data and his repository -->
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="OAG\Blog\Api\Data\PostInterface" xsi:type="string">OAG\Blog\Api\PostRepositoryInterface</item>
             </argument>
         </arguments>
     </type>

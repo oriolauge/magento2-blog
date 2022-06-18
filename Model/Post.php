@@ -8,11 +8,11 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Model\Url;
+use OAG\Blog\Api\Data\PostInterface;
 
-class Post extends AbstractModel implements IdentityInterface
+class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
 
     /**
@@ -29,11 +29,6 @@ class Post extends AbstractModel implements IdentityInterface
      * attribute_set_id for save Attribute Set ID value
      */
     const KEY_ATTR_TYPE_ID = 'attribute_set_id';
-
-    /**
-     * Post Store Id
-     */
-    const STORE_ID = 'store_id';
 
     /**
      * @var string
@@ -159,14 +154,36 @@ class Post extends AbstractModel implements IdentityInterface
     }
 
     /**
+     * Get Main Title
+     *
+     * @return string
+     * @codeCoverageIgnoreStart
+     */
+    public function getMainTitle()
+    {
+        return $this->_getData(self::KEY_MAIN_TITLE);
+    }
+
+    /**
+     * set Main Title
+     *
+     * @return string
+     * @codeCoverageIgnoreStart
+     */
+    public function setMainTitle($mainTitle)
+    {
+        return $this->setData(self::KEY_MAIN_TITLE, $mainTitle);
+    }
+
+    /**
      * Retrieve Store Id
      *
      * @return int
      */
     public function getStoreId()
     {
-        if ($this->hasData(self::STORE_ID)) {
-            return (int) $this->getData(self::STORE_ID);
+        if ($this->hasData(self::KEY_STORE_ID)) {
+            return (int) $this->getData(self::KEY_STORE_ID);
         }
         return (int) $this->storeManager->getStore()->getId();
     }
