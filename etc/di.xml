@@ -4,6 +4,7 @@
     <preference for="OAG\Blog\Api\UrlFinderInterface" type="OAG\Blog\Model\UrlFinder" />
     <preference for="OAG\Blog\Api\PostRepositoryInterface" type="OAG\Blog\Model\PostRepository" />
     <preference for="OAG\Blog\Api\Data\PostInterface" type="OAG\Blog\Model\Post" />
+    <preference for="OAG\Blog\Api\PostAttributeGroupRepositoryInterface" type="OAG\Blog\Model\PostAttributeGroupRepository" />
 
     <!-- Necessary to find and redirect to the correct url when user change store -->
     <type name="Magento\Store\Model\StoreSwitcher">
