@@ -11,9 +11,11 @@ use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use OAG\Blog\Api\PostAttributeGroupRepositoryInterface;
 
 /**
  * Class Eav data provider for post editing form
@@ -47,16 +49,35 @@ class Eav implements ModifierInterface
      */
     protected $attributes = [];
 
+    /**
+     * @var AttributeGroupInterface[]
+     */
+    protected $attributeGroups = [];
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var PostAttributeGroupRepositoryInterface
+     */
+    protected $attributeGroupRepository;
+
     public function __construct(
         CollectionFactory $collection,
         RequestInterface $request,
         PostRepositoryInterface $postRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        PostAttributeGroupRepositoryInterface $attributeGroupRepository,
         AttributeCollectionFactory $attributeCollectionFactory = null
     )
     {
         $this->collection = $collection->create();
         $this->request = $request;
         $this->postRepository = $postRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->attributeGroupRepository = $attributeGroupRepository;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
@@ -66,15 +87,18 @@ class Eav implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
-        $attributes = !empty($this->getAttributes()) ? $this->getAttributes() : [];
-        if ($attributes) {
-            $meta['general']['children'] = $this->getAttributesMeta($attributes, 'general');
-            $meta['general']['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-            $meta['general']['arguments']['data']['config']['dataScope'] = 'data.post';
-            $meta['general']['arguments']['data']['config']['label'] = __("Main Information");
-            $meta['general']['arguments']['data']['config']['collapsible'] = false;
-            $meta['general']['arguments']['data']['config']['sortOrder'] = 10;
+        foreach ($this->getGroups() as $groupCode => $group) {
+            $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
+            if ($attributes) {
+                $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
+                $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
+                $meta[$groupCode]['arguments']['data']['config']['dataScope'] = 'data.post';
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
+                $meta[$groupCode]['arguments']['data']['config']['collapsible'] = false;
+                $meta[$groupCode]['arguments']['data']['config']['sortOrder'] = 10;
+            }
         }
+
         return $meta;
     }
 
@@ -90,27 +114,25 @@ class Eav implements ModifierInterface
         $meta = [];
         $order = 0;
         foreach ($attributes as $sortOrder => $attribute) {
-            foreach($attribute as $key => $testValue) {
-                //$meta[$testValue->getAttributeCode()]['arguments']['data']['config']['service']['template'] = 'ui/form/element/helper/service';
-                //$meta[$testValue->getAttributeCode()]['arguments']['data']['config']['disabled'] = 1;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['componentType'] = Field::NAME;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['dataType'] = $testValue->getFrontendInput();
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['label'] = $testValue->getFrontendLabel();
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['formElement'] = 'input';
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['source'] = $groupCode;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['visible'] = true;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['required'] = $testValue->getIsRequired();
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['notice'] = null;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['default'] = null;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['code'] = $testValue->getAttributeCode();
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['dataScope'] = $testValue->getAttributeCode();
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['sortOrder'] = $order;
-                $order++;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['validation'] = ['required-entry' => true];
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['globalScope'] = false;
-                $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['scopeLabel'] = __('[store view]');
+            //$meta[$attribute->getAttributeCode()]['arguments']['data']['config']['service']['template'] = 'ui/form/element/helper/service';
+            //$meta[$attribute->getAttributeCode()]['arguments']['data']['config']['disabled'] = 1;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['componentType'] = Field::NAME;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['dataType'] = $attribute->getFrontendInput();
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['label'] = $attribute->getFrontendLabel();
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['formElement'] = 'input';
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['source'] = $groupCode;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['visible'] = true;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['required'] = $attribute->getIsRequired();
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['notice'] = null;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['default'] = null;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['code'] = $attribute->getAttributeCode();
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['dataScope'] = $attribute->getAttributeCode();
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['sortOrder'] = $order;
+            $order++;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['validation'] = ['required-entry' => true];
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['globalScope'] = false;
+            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['scopeLabel'] = __('[store view]');
 
-            }
         }
         return $meta;
     }
@@ -130,20 +152,98 @@ class Eav implements ModifierInterface
     /**
      * Retrieve attributes
      *
-     * @return ProductAttributeInterface[]
+     * @return array
      */
     protected function getAttributes()
     {
         if (!$this->attributes) {
-            $collection = $this->attributeCollectionFactory->create();
-            $post = $this->getCurrentPost();
-            $collection->setAttributeSetFilter($post->getAttributeSetId());
-            foreach ($collection->getItems() as $attribute) {
-                $this->attributes[$attribute->getAttributeGroupId()][] = $attribute;
-            }
+            $this->attributes = $this->loadAttributesForGroups($this->getGroups());
         }
 
         return $this->attributes;
+    }
+
+    /**
+     * Loads attributes for specified groups at once
+     *
+     * @param AttributeGroupInterface[] $groups
+     * @return PostAttributeInterface[]
+     */
+    protected function loadAttributesForGroups(array $groups)
+    {
+        $attributes = [];
+        $groupIds = [];
+
+        foreach ($groups as $group) {
+            $groupIds[$group->getAttributeGroupId()] = $this->calculateGroupCode($group);
+            $attributes[$this->calculateGroupCode($group)] = [];
+        }
+
+        $collection = $this->attributeCollectionFactory->create();
+        $collection->setAttributeGroupFilter(array_keys($groupIds));
+        foreach ($collection->getItems() as $attribute) {
+            $attributeCode = $groupIds[$attribute->getAttributeGroupId()];
+            $attributes[$attributeCode][] = $attribute;
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * Retrieve groups
+     *
+     * @return AttributeGroupInterface[]
+     */
+    protected function getGroups()
+    {
+        if (!$this->attributeGroups) {
+            $searchCriteria = $this->prepareGroupSearchCriteria()->create();
+            $attributeGroupSearchResult = $this->attributeGroupRepository->getList($searchCriteria);
+            foreach ($attributeGroupSearchResult->getItems() as $group) {
+                $this->attributeGroups[$this->calculateGroupCode($group)] = $group;
+            }
+        }
+
+        return $this->attributeGroups;
+    }
+
+    /**
+     * Calculate group code based on group name.
+     *
+     * Seems Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::calculateGroupCode()
+     * will change after MAGETWO-48290 is complete, so we will maintan this function but we
+     * will change some code to adapt to post requeriments.
+     *
+     * @see Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav::calculateGroupCode()
+     * @param AttributeGroupInterface $group
+     * @return string
+     */
+    private function calculateGroupCode(AttributeGroupInterface $group)
+    {
+        return $group->getAttributeGroupCode();
+    }
+
+    /**
+     * Initialize attribute group search criteria with filters.
+     *
+     * @return SearchCriteriaBuilder
+     */
+    protected function prepareGroupSearchCriteria()
+    {
+        return $this->searchCriteriaBuilder->addFilter(
+            AttributeGroupInterface::ATTRIBUTE_SET_ID,
+            $this->getAttributeSetId()
+        );
+    }
+
+    /**
+     * Return current attribute set id
+     *
+     * @return int|null
+     */
+    protected function getAttributeSetId()
+    {
+        return $this->getCurrentPost()->getAttributeSetId();
     }
 
     /**
