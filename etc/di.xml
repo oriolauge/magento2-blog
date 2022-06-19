@@ -28,7 +28,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="OAG\Blog\UI\Component\Listing\DataProvider">
+    <type name="OAG\Blog\Ui\DataProvider\Post\Listing\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">OAG\Blog\Model\ResourceModel\Post\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">RefGridFilterPool</argument>

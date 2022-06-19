@@ -58,7 +58,7 @@ class PostRepository implements PostRepositoryInterface
             }
             $this->postResource->load($post, $id);
             if (!$post->getId()) {
-                throw new NoSuchEntityException(__('Unable to find post with ID "%1"', $id));
+                throw NoSuchEntityException::singleField('id', $id);
             }
             $this->instances[$id][$cacheKey] = $post;
         }

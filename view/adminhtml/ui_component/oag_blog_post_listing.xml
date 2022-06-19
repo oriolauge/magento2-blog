@@ -18,7 +18,7 @@
     </argument>
     <dataSource name="oag_blog_post_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">OAG\Blog\Ui\Component\Listing\DataProvider</argument>
+            <argument name="class" xsi:type="string">OAG\Blog\Ui\DataProvider\Post\Listing\DataProvider</argument>
             <argument name="name" xsi:type="string">oag_blog_post_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">entity_id</argument>
