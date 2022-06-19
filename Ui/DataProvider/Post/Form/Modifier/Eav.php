@@ -15,8 +15,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
 
-
-
 /**
  * Class Eav data provider for post editing form
  * 
@@ -62,12 +60,12 @@ class Eav implements ModifierInterface
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
+
     /**
      * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
-        //return $meta;
         $attributes = !empty($this->getAttributes()) ? $this->getAttributes() : [];
         if ($attributes) {
             $meta['general']['children'] = $this->getAttributesMeta($attributes, 'general');
@@ -77,13 +75,8 @@ class Eav implements ModifierInterface
             $meta['general']['arguments']['data']['config']['collapsible'] = false;
             $meta['general']['arguments']['data']['config']['sortOrder'] = 10;
         }
-        /*ini_set('xdebug.var_display_max_depth', 10);
-        ini_set('xdebug.var_display_max_children', 256);
-        ini_set('xdebug.var_display_max_data', 1024);
-var_dump($meta); die();*/
         return $meta;
     }
-
 
     /**
      * Get attributes meta
@@ -97,13 +90,10 @@ var_dump($meta); die();*/
         $meta = [];
         $order = 0;
         foreach ($attributes as $sortOrder => $attribute) {
-            //perquè no tenim els grups... foreach de test
             foreach($attribute as $key => $testValue) {
                 //$meta[$testValue->getAttributeCode()]['arguments']['data']['config']['service']['template'] = 'ui/form/element/helper/service';
                 //$meta[$testValue->getAttributeCode()]['arguments']['data']['config']['disabled'] = 1;
                 $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['componentType'] = Field::NAME;
-
-                //test.... if removed from ui_component.xml
                 $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['dataType'] = $testValue->getFrontendInput();
                 $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['label'] = $testValue->getFrontendLabel();
                 $meta[$testValue->getAttributeCode()]['arguments']['data']['config']['formElement'] = 'input';
