@@ -3,7 +3,6 @@
  * Main post model
  */
 namespace OAG\Blog\Model;
-
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -14,21 +13,10 @@ use OAG\Blog\Api\Data\PostInterface;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
-
     /**
      * cache tag
      */
     const CACHE_TAG = 'oag_blog_post';
-
-    /**
-     * entity_type_id for save Entity Type ID value
-     */
-    const KEY_ENTITY_TYPE_ID = 'entity_type_id';
-
-    /**
-     * attribute_set_id for save Attribute Set ID value
-     */
-    const KEY_ATTR_TYPE_ID = 'attribute_set_id';
 
     /**
      * @var string

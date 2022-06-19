@@ -45,7 +45,7 @@ class Save extends Action
     public function execute()
     {
         $storeId = (int) $this->getRequest()->getParam('store_id');
-        $data = $this->getRequest()->getParams();
+        $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
@@ -53,13 +53,13 @@ class Save extends Action
             $postData = $this->postFactory->create();
             $postData->setStoreId($storeId);
             $params['store'] = $storeId;
-            if (empty($data['entity_id'])) {
-                $data['entity_id'] = null;
+            if (empty($data['post']['entity_id'])) {
+                $data['post']['entity_id'] = null;
             } else {
-                $postData->load($data['entity_id']);
-                $params['entity_id'] = $data['entity_id'];
+                $postData->load($data['post']['entity_id']);
+                $params['entity_id'] = $data['post']['entity_id'];
             }
-            $postData->addData($data);
+            $postData->addData($data['post']);
 
             $this->_eventManager->dispatch(
                 'oag_blog_post_prepare_save',

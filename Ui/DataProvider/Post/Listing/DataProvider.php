@@ -2,7 +2,7 @@
 /**
  * UI Grid data provider file
  */
-namespace OAG\Blog\Ui\Component\Listing;
+namespace OAG\Blog\Ui\DataProvider\Post\Listing;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as UiDataProvider;
