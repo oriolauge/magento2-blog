@@ -55,4 +55,11 @@ interface PostInterface extends ExtensibleDataInterface
      * @return array
      */
     public function getData();
+
+    /**
+     * Retrieve default attribute set id
+     *
+     * @return int
+     */
+    public function getDefaultAttributeSetId();
 }

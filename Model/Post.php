@@ -104,7 +104,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     public function getEntityTypeId()
     {
-        return $this->getData(self::KEY_ENTITY_TYPE_ID);
+        return $this->_getData(self::KEY_ENTITY_TYPE_ID);
     }
 
     /**
@@ -123,13 +123,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     public function getAttributeSetId()
     {
-        return $this->getData(self::KEY_ATTR_TYPE_ID);
+        return $this->_getData(self::KEY_ATTR_TYPE_ID);
     }
 
     /**
-     * Retrieve default attribute set id
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getDefaultAttributeSetId()
     {
@@ -171,7 +169,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     public function getStoreId()
     {
         if ($this->hasData(self::KEY_STORE_ID)) {
-            return (int) $this->getData(self::KEY_STORE_ID);
+            return (int) $this->_getData(self::KEY_STORE_ID);
         }
         return (int) $this->storeManager->getStore()->getId();
     }
