@@ -24,5 +24,10 @@ interface EavAttributeInterface extends AttributeInterface
      */
     public function getIsWysiwygEnabled();
 
+    /**
+     * Return attribute scope
+     *
+     * @return string
+     */
     public function getScope();
 }

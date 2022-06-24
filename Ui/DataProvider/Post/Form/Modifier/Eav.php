@@ -26,6 +26,7 @@ use OAG\Blog\Api\Data\EavAttributeInterface;
 use OAG\Blog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use OAG\Blog\Ui\DataProvider\EavValidationRules;
+use OAG\Blog\Model\PostFactory;
 
 /**
  * Class Eav data provider for post editing form
@@ -134,6 +135,11 @@ class Eav implements ModifierInterface
      */
     protected $eavValidationRules;
 
+    /**
+     * @var PostFactory
+     */
+    protected $postFactory;
+
     public function __construct(
         CollectionFactory $collection,
         RequestInterface $request,
@@ -147,6 +153,7 @@ class Eav implements ModifierInterface
         StoreManagerInterface $storeManager,
         ScopeOverriddenValue $scopeOverriddenValue,
         EavValidationRules $eavValidationRules,
+        PostFactory $postFactory,
         AttributeCollectionFactory $attributeCollectionFactory = null
     )
     {
@@ -162,6 +169,7 @@ class Eav implements ModifierInterface
         $this->storeManager = $storeManager;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->eavValidationRules = $eavValidationRules;
+        $this->postFactory = $postFactory;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
@@ -580,11 +588,20 @@ class Eav implements ModifierInterface
     /**
      * Return current attribute set id
      *
-     * @return int|null
+     * @return int
      */
-    protected function getAttributeSetId()
+    protected function getAttributeSetId(): int
     {
-        return $this->getCurrentPost()->getAttributeSetId();
+        $post = $this->getCurrentPost();
+        if (is_numeric($post->getAttributeSetId())) {
+            return $post->getAttributeSetId();
+        } else {
+            /**
+             * In case user are created a new post, we need to get the
+             * default attribute set
+             */
+            return $post->getDefaultAttributeSetId();
+        }
     }
 
     /**
@@ -594,8 +611,11 @@ class Eav implements ModifierInterface
      */
     protected function getCurrentPost(): PostInterface
     {
+        /**
+         * For create new post option
+         */
         if (!($id = $this->request->getParam('entity_id'))) {
-            throw new Exception(__('URL entity_id param is missign'));
+            return $this->postFactory->create();
         }
 
         $storeId = (int) $this->request->getParam('store');
