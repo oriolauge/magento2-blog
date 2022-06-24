@@ -114,12 +114,12 @@ class EavTablesSetup
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Is System'
-            )->addColumn(
+            /*)->addColumn( // seems is not necesary because this value is in eav_entity_attribute
                 'sort_order',
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Sort Order'
+                'Sort Order'*/
             )->addColumn(
                 'data_model',
                 Table::TYPE_TEXT,

@@ -7,12 +7,13 @@ namespace OAG\Blog\Model\ResourceModel\Eav;
 use Magento\Eav\Model\Entity\Attribute as EavAttribute;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use OAG\Blog\Setup\PostSetup;
+use OAG\Blog\Api\Data\EavAttributeInterface;
 
 /**
  * Class Attribute
  * @package OAG\Blog\Model\ResourceModel\Eav
  */
-class Attribute extends EavAttribute implements ScopedAttributeInterface
+class Attribute extends EavAttribute implements ScopedAttributeInterface, EavAttributeInterface
 {
 
     /**
@@ -174,5 +175,24 @@ class Attribute extends EavAttribute implements ScopedAttributeInterface
     {
         $this->_eavConfig->clear();
         return parent::afterDelete();
+    }
+
+    public function getIsWysiwygEnabled()
+    {
+        return $this->getData(self::IS_WYSIWYG_ENABLED);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getScope()
+    {
+        if ($this->isScopeGlobal()) {
+            return self::SCOPE_GLOBAL_TEXT;
+        } elseif ($this->isScopeWebsite()) {
+            return self::SCOPE_WEBSITE_TEXT;
+        } else {
+            return self::SCOPE_STORE_TEXT;
+        }
     }
 }

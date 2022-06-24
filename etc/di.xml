@@ -5,6 +5,8 @@
     <preference for="OAG\Blog\Api\PostRepositoryInterface" type="OAG\Blog\Model\PostRepository" />
     <preference for="OAG\Blog\Api\Data\PostInterface" type="OAG\Blog\Model\Post" />
     <preference for="OAG\Blog\Api\PostAttributeGroupRepositoryInterface" type="OAG\Blog\Model\PostAttributeGroupRepository" />
+    <preference for="OAG\Blog\Api\PostAttributeRepositoryInterface" type="OAG\Blog\Model\PostAttributeRepository" />
+
 
     <!-- Necessary to find and redirect to the correct url when user change store -->
     <type name="Magento\Store\Model\StoreSwitcher">
@@ -19,6 +21,21 @@
         <arguments>
             <argument name="entities" xsi:type="array">
                 <item name="OAG\Blog\Api\Data\PostInterface" xsi:type="string">OAG\Blog\Api\PostRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Necessary to add our new Entity types in metadata pool that is used in our module (ScopeOverridenValue) -->
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="OAG\Blog\Api\Data\PostInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">oag_blog_post</item> <!-- todo: better name: oag_blog_post_entity -->
+                    <item name="eavEntityType" xsi:type="string">oag_blog_post</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>

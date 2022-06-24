@@ -16,6 +16,16 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use OAG\Blog\Api\PostAttributeGroupRepositoryInterface;
+use Magento\Framework\Api\SortOrderBuilder;
+use OAG\Blog\Api\Data\PostAttributeInterface;
+use OAG\Blog\Api\PostAttributeRepositoryInterface;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
+use Magento\Store\Model\StoreManagerInterface;
+use OAG\Blog\Api\Data\EavAttributeInterface;
+use OAG\Blog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
+use OAG\Blog\Ui\DataProvider\EavValidationRules;
 
 /**
  * Class Eav data provider for post editing form
@@ -24,6 +34,26 @@ use OAG\Blog\Api\PostAttributeGroupRepositoryInterface;
  */
 class Eav implements ModifierInterface
 {
+    /**
+     * Holds sort order multipier
+     */
+    const SORT_ORDER_MULTIPLIER = 10;
+
+    /**
+     * Holds post data scope
+     */
+    const DATA_SCOPE_PRODUCT = 'data.post';
+
+    /**
+     * Holds container prefix for meta attributes
+     */
+    const CONTAINER_PREFIX = 'container_';
+
+    /**
+     * Holds Meta config path
+     */
+    const META_CONFIG_PATH = '/arguments/data/config';
+
     /**
      * @var CollectionFactory
      */
@@ -64,12 +94,59 @@ class Eav implements ModifierInterface
      */
     protected $attributeGroupRepository;
 
+    /**
+     * @var SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
+
+    /**
+     * @var PostAttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * @var ArrayManager
+     */
+    protected $arrayManager;
+
+    /**
+     * @var FormElementMapper
+     */
+    protected $formElementMapper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var array
+     */
+    private $canDisplayUseDefault = [];
+
+    /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
+     * @var EavValidationRules
+     */
+    protected $eavValidationRules;
+
     public function __construct(
         CollectionFactory $collection,
         RequestInterface $request,
         PostRepositoryInterface $postRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         PostAttributeGroupRepositoryInterface $attributeGroupRepository,
+        SortOrderBuilder $sortOrderBuilder,
+        PostAttributeRepositoryInterface $attributeRepository,
+        ArrayManager $arrayManager,
+        FormElementMapper $formElementMapper,
+        StoreManagerInterface $storeManager,
+        ScopeOverriddenValue $scopeOverriddenValue,
+        EavValidationRules $eavValidationRules,
         AttributeCollectionFactory $attributeCollectionFactory = null
     )
     {
@@ -78,6 +155,13 @@ class Eav implements ModifierInterface
         $this->postRepository = $postRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributeGroupRepository = $attributeGroupRepository;
+        $this->sortOrderBuilder = $sortOrderBuilder;
+        $this->attributeRepository = $attributeRepository;
+        $this->arrayManager = $arrayManager;
+        $this->formElementMapper = $formElementMapper;
+        $this->storeManager = $storeManager;
+        $this->scopeOverriddenValue = $scopeOverriddenValue;
+        $this->eavValidationRules = $eavValidationRules;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
@@ -87,16 +171,19 @@ class Eav implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
+        $sortOrder = 0;
         foreach ($this->getGroups() as $groupCode => $group) {
             $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['dataScope'] = 'data.post';
+                $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = false;
-                $meta[$groupCode]['arguments']['data']['config']['sortOrder'] = 10;
+                $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
+                    $sortOrder * self::SORT_ORDER_MULTIPLIER;
             }
+            $sortOrder++;
         }
 
         return $meta;
@@ -109,32 +196,265 @@ class Eav implements ModifierInterface
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getAttributesMeta(array $attributes, $groupCode)
+    protected function getAttributesMeta(array $attributes, $groupCode)
     {
-        $meta = [];
-        $order = 0;
-        foreach ($attributes as $sortOrder => $attribute) {
-            //$meta[$attribute->getAttributeCode()]['arguments']['data']['config']['service']['template'] = 'ui/form/element/helper/service';
-            //$meta[$attribute->getAttributeCode()]['arguments']['data']['config']['disabled'] = 1;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['componentType'] = Field::NAME;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['dataType'] = $attribute->getFrontendInput();
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['label'] = $attribute->getFrontendLabel();
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['formElement'] = 'input';
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['source'] = $groupCode;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['visible'] = true;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['required'] = $attribute->getIsRequired();
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['notice'] = null;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['default'] = null;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['code'] = $attribute->getAttributeCode();
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['dataScope'] = $attribute->getAttributeCode();
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['sortOrder'] = $order;
-            $order++;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['validation'] = ['required-entry' => true];
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['globalScope'] = false;
-            $meta[$attribute->getAttributeCode()]['arguments']['data']['config']['scopeLabel'] = __('[store view]');
 
+        $meta = [];
+        foreach ($attributes as $sortOrder => $attribute) {
+            if (!($attributeContainer = $this->setupAttributeContainerMeta($attribute))) {
+                continue;
+            }
+
+            $attributeContainer = $this->addContainerChildren($attributeContainer, $attribute, $groupCode, $sortOrder);
+            $meta[self::CONTAINER_PREFIX . $attribute->getAttributeCode()] = $attributeContainer;
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Add container children
+     * 
+     * @param array $attributeContainer
+     * @param EavAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
+     * @return array
+     */
+    protected function addContainerChildren(
+        array $attributeContainer,
+        EavAttributeInterface $attribute,
+        $groupCode,
+        $sortOrder
+    ) {
+        foreach ($this->getContainerChildren($attribute, $groupCode, $sortOrder) as $childCode => $child) {
+            $attributeContainer['children'][$childCode] = $child;
+        }
+
+        $attributeContainer = $this->arrayManager->merge(
+            ltrim(self::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
+            $attributeContainer,
+            [
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER
+            ]
+        );
+
+        return $attributeContainer;
+    }
+
+    /**
+     * Initial meta setup
+     *
+     * @param EavAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function setupAttributeMeta(EavAttributeInterface $attribute, $groupCode, $sortOrder)
+    {
+        $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
+        $attributeCode = $attribute->getAttributeCode();
+        $meta = $this->arrayManager->set(
+            $configPath,
+            [],
+            [
+                'dataType' => $attribute->getFrontendInput(),
+                'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
+                'visible' => $attribute->getIsVisible(),
+                'required' => $attribute->getIsRequired(),
+                'notice' => $attribute->getNote() === null ? null : __($attribute->getNote()),
+                'default' => (!$this->isPostExists()) ? $attribute->getDefaultValue() : null,
+                'label' => __($attribute->getDefaultFrontendLabel()),
+                'code' => $attributeCode,
+                'source' => $groupCode,
+                'scopeLabel' => $this->getScopeLabel($attribute),
+                'globalScope' => $this->isScopeGlobal($attribute),
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER
+            ]
+        );
+
+        if (!$this->arrayManager->exists($configPath . '/componentType', $meta)) {
+            $meta = $this->arrayManager->merge($configPath, $meta, ['componentType' => Field::NAME]);
+        }
+
+        $childData = $this->arrayManager->get($configPath, $meta, []);
+        if ($rules = $this->eavValidationRules->build($attribute, $childData)) {
+            $meta = $this->arrayManager->merge($configPath, $meta, ['validation' => $rules]);
+        }
+
+        $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
+
+        switch ($attribute->getFrontendInput()) {
+            case 'boolean':
+                $meta = $this->customizeCheckbox($attribute, $meta);
+                break;
+            case 'textarea':
+                $meta = $this->customizeWysiwyg($attribute, $meta);
+                break;
+            case 'datetime':
+                $meta = $this->customizeDatetimeAttribute($meta);
+                break;
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Customize datetime attribute
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeDatetimeAttribute(array $meta): array
+    {
+        $meta['arguments']['data']['config']['options']['showsTime'] = 1;
+
+        return $meta;
+    }
+
+    /**
+     * Add wysiwyg properties
+     *
+     * @param PostAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizeWysiwyg(PostAttributeInterface $attribute, array $meta)
+    {
+        if (!$attribute->getIsWysiwygEnabled()) {
+            return $meta;
+        }
+
+        $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
+        $meta['arguments']['data']['config']['wysiwyg'] = true;
+        /**
+         * @todo: you need to create a textarea attribute to debug and configure this param
+         */
+        $meta['arguments']['data']['config']['wysiwygConfigData'] = [];
+
+        return $meta;
+    }
+
+    /**
+     * Customize checkboxes
+     *
+     * @param PostAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizeCheckbox(PostAttributeInterface $attribute, array $meta)
+    {
+        if ($attribute->getFrontendInput() === 'boolean') {
+            $meta['arguments']['data']['config']['prefer'] = 'toggle';
+            $meta['arguments']['data']['config']['valueMap'] = [
+                'true' => '1',
+                'false' => '0',
+            ];
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Adds 'use default value' checkbox.
+     *
+     * @param EavAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function addUseDefaultValueCheckbox(EavAttributeInterface $attribute, array $meta)
+    {
+        $canDisplayService = $this->canDisplayUseDefault($attribute);
+        if ($canDisplayService) {
+            $meta['arguments']['data']['config']['service'] = [
+                'template' => 'ui/form/element/helper/service',
+            ];
+
+            $meta['arguments']['data']['config']['disabled'] = !$this->scopeOverriddenValue->containsValue(
+                PostInterface::class,
+                $this->getCurrentPost(),
+                $attribute->getAttributeCode(),
+                (int) $this->request->getParam('store', 0)
+            );
         }
         return $meta;
+    }
+
+    /**
+     * Whether attribute can have default value
+     *
+     * @param EavAttributeInterface $attribute
+     * @return bool
+     */
+    private function canDisplayUseDefault(EavAttributeInterface $attribute)
+    {
+        $attributeCode = $attribute->getAttributeCode();
+        /** @var Post $post */
+        $post = $this->getCurrentPost();
+
+        if (isset($this->canDisplayUseDefault[$attributeCode])) {
+            return $this->canDisplayUseDefault[$attributeCode];
+        }
+
+        return $this->canDisplayUseDefault[$attributeCode] = (
+            ($attribute->getScope() != EavAttributeInterface::SCOPE_GLOBAL_TEXT)
+            && $post
+            && $post->getId()
+            && $post->getStoreId()
+        );
+    }
+
+    /**
+     * Retrieve container child fields
+     * 
+     * @param EavAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
+     * @return array
+     */
+    public function getContainerChildren(EavAttributeInterface $attribute, $groupCode, $sortOrder)
+    {
+        if (!($child = $this->setupAttributeMeta($attribute, $groupCode, $sortOrder))) {
+            return [];
+        }
+
+        return [$attribute->getAttributeCode() => $child];
+    }
+
+    /**
+     * Setup attribute container meta
+     *
+     * @param EavAttributeInterface $attribute
+     * @return array
+     */
+    protected function setupAttributeContainerMeta(EavAttributeInterface $attribute)
+    {
+        $containerMeta = $this->arrayManager->set(
+            'arguments/data/config',
+            [],
+            [
+                'formElement' => 'container',
+                'componentType' => 'container',
+                'breakLine' => false,
+                'label' => $attribute->getDefaultFrontendLabel(),
+                'required' => $attribute->getIsRequired(),
+            ]
+        );
+
+        if ($attribute->getIsWysiwygEnabled()) {
+            $containerMeta = $this->arrayManager->merge(
+                'arguments/data/config',
+                $containerMeta,
+                [
+                    'component' => 'Magento_Ui/js/form/components/group',
+                    'label' => false,
+                    'required' => false,
+                ]
+            );
+        }
+
+        return $containerMeta;
     }
 
     /**
@@ -181,9 +501,30 @@ class Eav implements ModifierInterface
 
         $collection = $this->attributeCollectionFactory->create();
         $collection->setAttributeGroupFilter(array_keys($groupIds));
+
+        $mapAttributeToGroup = [];
+
         foreach ($collection->getItems() as $attribute) {
-            $attributeCode = $groupIds[$attribute->getAttributeGroupId()];
-            $attributes[$attributeCode][] = $attribute;
+            $mapAttributeToGroup[$attribute->getAttributeId()] = $attribute->getAttributeGroupId();
+        }
+
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('sort_order')
+            ->setAscendingDirection()
+            ->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(AttributeGroupInterface::GROUP_ID, array_keys($groupIds), 'in')
+            ->addFilter(PostAttributeInterface::IS_VISIBLE, 1)
+            ->addSortOrder($sortOrder)
+            ->create();
+
+        $groupAttributes = $this->attributeRepository->getList($searchCriteria)->getItems();
+
+        foreach ($groupAttributes as $attribute) {
+            $attributeGroupId = $mapAttributeToGroup[$attribute->getAttributeId()];
+            $attributeGroupCode = $groupIds[$attributeGroupId];
+            $attributes[$attributeGroupCode][] = $attribute;
         }
 
         return $attributes;
@@ -264,5 +605,63 @@ class Eav implements ModifierInterface
         } else {
             return $this->postRepository->getById($id);
         }
+    }
+
+    /**
+     * Retrieve form element
+     *
+     * @param string $value
+     * @return mixed
+     */
+    private function getFormElementsMapValue($value)
+    {
+        $valueMap = $this->formElementMapper->getMappings();
+
+        return $valueMap[$value] ?? $value;
+    }
+
+    /**
+     * Check is post already new or we trying to create one
+     *
+     * @return bool
+     */
+    private function isPostExists()
+    {
+        return (bool) $this->getCurrentPost()->getId();
+    }
+
+    /**
+     * Retrieve scope label
+     *
+     * @param EavAttributeInterface $attribute
+     * @return \Magento\Framework\Phrase|string
+     */
+    private function getScopeLabel(EavAttributeInterface $attribute)
+    {
+        if ($this->storeManager->isSingleStoreMode()) {
+            return '';
+        }
+
+        switch ($attribute->getScope()) {
+            case PostAttributeInterface::SCOPE_GLOBAL_TEXT:
+                return __('[GLOBAL]');
+            case PostAttributeInterface::SCOPE_WEBSITE_TEXT:
+                return __('[WEBSITE]');
+            case PostAttributeInterface::SCOPE_STORE_TEXT:
+                return __('[STORE VIEW]');
+        }
+
+        return '';
+    }
+
+    /**
+     * Check if attribute scope is global.
+     *
+     * @param EavAttributeInterface $attribute
+     * @return bool
+     */
+    private function isScopeGlobal(EavAttributeInterface $attribute)
+    {
+        return $attribute->getScope() === PostAttributeInterface::SCOPE_GLOBAL_TEXT;
     }
 }
