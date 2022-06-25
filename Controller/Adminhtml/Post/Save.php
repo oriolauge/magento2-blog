@@ -7,6 +7,8 @@ namespace OAG\Blog\Controller\Adminhtml\Post;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use OAG\Blog\Model\PostFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends Action
 {
@@ -16,15 +18,22 @@ class Save extends Action
     protected $postFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param  Context           $context
      * @param  PostFactory       $postFactory
      */
     public function __construct(
         Context $context,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->postFactory = $postFactory;
         parent::__construct($context);
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -44,26 +53,46 @@ class Save extends Action
      */
     public function execute()
     {
-        $storeId = (int) $this->getRequest()->getParam('store_id');
         $data = $this->getRequest()->getPostValue();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $params = [];
             $postData = $this->postFactory->create();
+            if (!empty($data['post']['store_id'])) {
+                $storeId = (int) $data['post']['store_id'];
+                $params['store'] = $storeId;
+            } else {
+                $storeId = Store::DEFAULT_STORE_ID;
+            }
+
+            $store = $this->storeManager->getStore($storeId);
+            $this->storeManager->setCurrentStore($store->getCode());
+
             $postData->setStoreId($storeId);
-            $params['store'] = $storeId;
             if (empty($data['post']['entity_id'])) {
                 $data['post']['entity_id'] = null;
             } else {
                 $postData->load($data['post']['entity_id']);
                 $params['entity_id'] = $data['post']['entity_id'];
             }
+
             $postData->addData($data['post']);
+
+            /**
+             * Check "Use Default Value" checkboxes values
+             */
+            if (!empty($data['use_default'])) {
+                foreach ($data['use_default'] as $attributeCode => $attributeValue) {
+                    if ($attributeValue) {
+                        $postData->setData($attributeCode, null);
+                    }
+                }
+            }
 
             $this->_eventManager->dispatch(
                 'oag_blog_post_prepare_save',
-                ['object' => $this->postFactory, 'request' => $this->getRequest()]
+                ['object' => $postData, 'request' => $this->getRequest()]
             );
 
             try {

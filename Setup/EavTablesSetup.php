@@ -154,13 +154,13 @@ class EavTablesSetup
                 ['identity' => true, 'nullable' => false, 'primary' => true],
                 'Value ID'
             )
-            ->addColumn(
+            /*->addColumn( // Is not necessary because main entity table has this value
                 'entity_type_id',
                 Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Entity Type ID'
-            )
+            )*/
             ->addColumn(
                 'attribute_id',
                 Table::TYPE_SMALLINT,
@@ -192,10 +192,10 @@ class EavTablesSetup
             ->addIndex(
                 $this->setup->getIdxName(
                     $tableName,
-                    ['entity_id', 'attribute_id', 'store_id', 'entity_type_id'],
+                    ['entity_id', 'attribute_id', 'store_id'],
                     AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['entity_id', 'attribute_id', 'store_id', 'entity_type_id'],
+                ['entity_id', 'attribute_id', 'store_id'],
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(
@@ -209,10 +209,6 @@ class EavTablesSetup
             ->addIndex(
                 $this->setup->getIdxName($tableName, ['store_id']),
                 ['store_id']
-            )
-            ->addIndex(
-                $this->setup->getIdxName($tableName, ['entity_type_id']),
-                ['entity_type_id']
             )
             ->addForeignKey(
                 $this->setup->getFkName(
@@ -243,13 +239,6 @@ class EavTablesSetup
                 'store_id',
                 $this->setup->getTable('store'),
                 'store_id',
-                Table::ACTION_CASCADE
-            )
-            ->addForeignKey(
-                $this->setup->getFkName($tableName, 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
-                'entity_type_id',
-                $this->setup->getTable('eav_entity_type'),
-                'entity_type_id',
                 Table::ACTION_CASCADE
             )
             ->setComment($entityCode . ' ' . $type . 'Attribute Backend Table');

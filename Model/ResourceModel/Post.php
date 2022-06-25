@@ -63,6 +63,33 @@ class Post extends AbstractEntity
     }
 
     /**
+     * Save entity's attributes into the object's resource
+     *
+     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getEntityManager()->save($object);
+        return $this;
+    }
+
+    /**
+     * Returns EntityManager object
+     *
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
+    }
+
+    /**
      * Return Entity Type instance
      *
      * @return \Magento\Eav\Model\Entity\Type
@@ -144,15 +171,10 @@ class Post extends AbstractEntity
         $storeId = $object->getStoreId() ?: $this->getDefaultStoreId();
         $data = [
             $entityIdField => $object->getId(),
-            'entity_type_id' => $object->getEntityTypeId(),
             'attribute_id' => $attribute->getId(),
             'value' => $this->_prepareValueForSave($value, $attribute),
             'store_id' => $storeId,
         ];
-
-        if (!$this->getEntityTable() || $this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
-            $data['entity_type_id'] = $object->getEntityTypeId();
-        }
 
         if ($attribute->isScopeStore()) {
             /**
