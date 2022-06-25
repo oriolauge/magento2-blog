@@ -154,13 +154,6 @@ class EavTablesSetup
                 ['identity' => true, 'nullable' => false, 'primary' => true],
                 'Value ID'
             )
-            /*->addColumn( // Is not necessary because main entity table has this value
-                'entity_type_id',
-                Table::TYPE_SMALLINT,
-                null,
-                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                'Entity Type ID'
-            )*/
             ->addColumn(
                 'attribute_id',
                 Table::TYPE_SMALLINT,

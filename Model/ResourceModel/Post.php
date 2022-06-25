@@ -58,7 +58,6 @@ class Post extends AbstractEntity
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
         $object->setAttributeSetId($object->getAttributeSetId() ?: $this->getEntityType()->getDefaultAttributeSetId());
-        $object->setEntityTypeId($object->getEntityTypeId() ?: $this->getEntityType()->getEntityTypeId());
         return parent::_beforeSave($object);
     }
 
@@ -111,7 +110,6 @@ class Post extends AbstractEntity
     {
         return [
             'attribute_set_id',
-            'entity_type_id',
             'created_at',
             'updated_at'
         ];

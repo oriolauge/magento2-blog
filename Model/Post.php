@@ -89,25 +89,6 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
-     * Set attribute set entity type id
-     *
-     * @param int $entityTypeId
-     * @return $this
-     */
-    public function setEntityTypeId($entityTypeId)
-    {
-        return $this->setData(self::KEY_ENTITY_TYPE_ID, $entityTypeId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEntityTypeId()
-    {
-        return $this->_getData(self::KEY_ENTITY_TYPE_ID);
-    }
-
-    /**
      * Set attribute set id
      *
      * @param int $attrSetId

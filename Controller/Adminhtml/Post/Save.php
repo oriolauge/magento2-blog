@@ -72,6 +72,7 @@ class Save extends Action
             $postData->setStoreId($storeId);
             if (empty($data['post']['entity_id'])) {
                 $data['post']['entity_id'] = null;
+                $postData->setAttributeSetId($postData->getDefaultAttributeSetId());
             } else {
                 $postData->load($data['post']['entity_id']);
                 $params['entity_id'] = $data['post']['entity_id'];
