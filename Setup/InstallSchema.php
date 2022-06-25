@@ -54,33 +54,6 @@ class InstallSchema implements InstallSchemaInterface
             )->setComment('Entity Table');
 
         $table->addColumn(
-            'entity_type_id',
-            Table::TYPE_SMALLINT,
-            null,
-            [
-                'unsigned' => true,
-                'nullable' => false,
-                'default' => '0',
-            ],
-            'Entity Type ID'
-        )->addIndex(
-            $setup->getIdxName($tableName, ['entity_type_id']),
-            ['entity_type_id']
-        )->addForeignKey(
-            $setup->getFkName(
-                'oag_blog_post',
-                'entity_type_id',
-                'eav_entity_type',
-                'entity_type_id'
-            ),
-            'entity_type_id',
-            $setup->getTable('eav_entity_type'),
-            'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        );
-
-        $table->addColumn(
             'attribute_set_id',
             Table::TYPE_SMALLINT,
             null,

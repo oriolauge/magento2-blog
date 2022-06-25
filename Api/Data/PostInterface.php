@@ -10,7 +10,6 @@ interface PostInterface extends ExtensibleDataInterface
      */
     const KEY_MAIN_TITLE = 'main_title';
     const KEY_STORE_ID = 'store_id';
-    const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     const KEY_ATTR_TYPE_ID = 'attribute_set_id';
 
     /**
