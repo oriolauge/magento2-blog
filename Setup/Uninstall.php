@@ -39,7 +39,9 @@ class Uninstall implements UninstallInterface
     /**
      * Uninstall all data module
      *
-     * @todo: Removes attributes and group attributes
+     * We don't add startSetup/endSetup because in uninstall, we use foreign keys
+     * to remove attributes, attributes_grous, etc
+     *
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
@@ -48,7 +50,6 @@ class Uninstall implements UninstallInterface
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
     ) {
-		$setup->startSetup();
         $eavTypeCollection = $this->eavCollectionFactory->create();
         $eavTypeCollection->addFieldToFilter('entity_type_code',
             [
@@ -60,7 +61,6 @@ class Uninstall implements UninstallInterface
         }
         $eavTablesSetup = $this->eavTablesSetupFactory->create(['setup' => $setup]);
         $eavTablesSetup->dropEavTables();
-		$setup->endSetup();
     }
 
 }
