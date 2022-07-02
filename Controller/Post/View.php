@@ -52,7 +52,7 @@ class View implements HttpGetActionInterface
         $post = $this->postRepository->getById($postId);
        
         $block = $page->getLayout()->getBlock('oagblog_post_view_content');
-        $block->setData('custom_parameter', $post->getMainTitle());
+        $block->setData('custom_parameter', $post->getContent());
         return $page;
     }
 }

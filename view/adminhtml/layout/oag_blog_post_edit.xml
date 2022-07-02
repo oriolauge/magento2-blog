@@ -2,6 +2,7 @@
 <!-- set UI Form layout for edit record -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
     <body>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="oag_blog_post.store.switcher" template="Magento_Backend::store/switcher.phtml" >

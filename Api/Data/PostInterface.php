@@ -8,9 +8,18 @@ interface PostInterface extends ExtensibleDataInterface
     /**
      * Constants defined for keys of data array
      */
-    const KEY_MAIN_TITLE = 'main_title';
+    const KEY_TITLE = 'title';
     const KEY_STORE_ID = 'store_id';
     const KEY_ATTR_TYPE_ID = 'attribute_set_id';
+    const KEY_CONTENT = 'content';
+    const KEY_SHORT_CONTENT = 'short_content';
+    const KEY_META_TITLE = 'meta_title';
+    const KEY_URL_KEY = 'url_key';
+    const KEY_META_DESCRIPTION = 'meta_description';
+    const KEY_META_KEYWORDS = 'meta_keywords';
+    const KEY_STATUS = 'status';
+    const KEY_PUBLISHED_AT = 'published_at';
+    const KEY_IMAGE = 'image';
 
     /**
      * @return int
@@ -26,13 +35,13 @@ interface PostInterface extends ExtensibleDataInterface
     /**
      * @return string
      */
-    public function getMainTitle();
+    public function getTitle();
 
     /**
     * @param string $name
     * @return void
     */
-    public function setMainTitle($name);
+    public function setTitle($name);
 
     /**
      * @return string
@@ -61,4 +70,12 @@ interface PostInterface extends ExtensibleDataInterface
      * @return int
      */
     public function getDefaultAttributeSetId();
+
+    /**
+     * Get post content
+     *
+     * @param bool $processHtml
+     * @return string
+     */
+    public function getContent($processHtml = true);
 }

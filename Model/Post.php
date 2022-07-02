@@ -10,6 +10,7 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
+use Magento\Widget\Model\Template\Filter;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -21,7 +22,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     /**
      * @var string
      */
-    protected $_cacheTag = 'oag_blog_post';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var Url
@@ -34,6 +35,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     protected $storeManager;
 
     /**
+     * @var Filter
+     */
+    protected $templateFilter;
+
+    /**
      * Prefix of model events names
      *
      * @var string
@@ -44,11 +50,13 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         Context $context,
         Registry $registry,
         Url $url,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Filter $templateFilter
     )
     {
         $this->url = $url;
         $this->storeManager = $storeManager;
+        $this->templateFilter = $templateFilter;
         parent::__construct($context, $registry);
     }
 
@@ -121,25 +129,25 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
-     * Get Main Title
+     * Get Title
      *
      * @return string
      * @codeCoverageIgnoreStart
      */
-    public function getMainTitle()
+    public function getTitle()
     {
-        return $this->_getData(self::KEY_MAIN_TITLE);
+        return $this->_getData(self::KEY_TITLE);
     }
 
     /**
-     * set Main Title
+     * Set title
      *
      * @return string
      * @codeCoverageIgnoreStart
      */
-    public function setMainTitle($mainTitle)
+    public function setTitle($title)
     {
-        return $this->setData(self::KEY_MAIN_TITLE, $mainTitle);
+        return $this->setData(self::KEY_TITLE, $title);
     }
 
     /**
@@ -153,5 +161,18 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
             return (int) $this->_getData(self::KEY_STORE_ID);
         }
         return (int) $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContent($processHtml = true)
+    {
+        $content = $this->_getData(self::KEY_CONTENT);
+        if ($processHtml === true) {
+            $content = $this->templateFilter->filter($content);
+        }
+
+        return $content;
     }
 }
