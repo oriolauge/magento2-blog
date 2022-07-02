@@ -187,7 +187,7 @@ class Eav implements ModifierInterface
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['label'] = __($group->getAttributeGroupName());
-                $meta[$groupCode]['arguments']['data']['config']['collapsible'] = false;
+                $meta[$groupCode]['arguments']['data']['config']['collapsible'] = $group->getDefaultId() ? false : true;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
                     $sortOrder * self::SORT_ORDER_MULTIPLIER;
             }
@@ -324,11 +324,11 @@ class Eav implements ModifierInterface
     /**
      * Add wysiwyg properties
      *
-     * @param PostAttributeInterface $attribute
+     * @param EavAttributeInterface $attribute
      * @param array $meta
      * @return array
      */
-    private function customizeWysiwyg(PostAttributeInterface $attribute, array $meta)
+    private function customizeWysiwyg(EavAttributeInterface $attribute, array $meta)
     {
         if (!$attribute->getIsWysiwygEnabled()) {
             return $meta;
@@ -339,7 +339,16 @@ class Eav implements ModifierInterface
         /**
          * @todo: you need to create a textarea attribute to debug and configure this param
          */
-        $meta['arguments']['data']['config']['wysiwygConfigData'] = [];
+        $meta['arguments']['data']['config']['wysiwygConfigData'] = [
+            'add_variables' => false,
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'admin__field-wide',
+            'is_pagebuilder_enabled' => true,
+            'pagebuilder_content_snapshot' => true,
+            'pagebuilder_button' => true
+        ];
 
         return $meta;
     }
@@ -347,11 +356,11 @@ class Eav implements ModifierInterface
     /**
      * Customize checkboxes
      *
-     * @param PostAttributeInterface $attribute
+     * @param EavAttributeInterface $attribute
      * @param array $meta
      * @return array
      */
-    private function customizeCheckbox(PostAttributeInterface $attribute, array $meta)
+    private function customizeCheckbox(EavAttributeInterface $attribute, array $meta)
     {
         if ($attribute->getFrontendInput() === 'boolean') {
             $meta['arguments']['data']['config']['prefer'] = 'toggle';

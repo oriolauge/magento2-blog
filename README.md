@@ -24,3 +24,7 @@ TODO
 
 ## Future Features
 TODO
+
+## FAQ
+- The post list admin panel show an incorrect column order.
+To fix this issue, you can remove in ui_bookmark mysql table the rows with namespace oag_blog_post_listing. When this rows are remove it, you can flush cache and the order will be correct

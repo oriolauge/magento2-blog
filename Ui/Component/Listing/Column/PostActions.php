@@ -8,6 +8,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
+use OAG\Blog\Api\Data\PostInterface;
 
 class PostActions extends Column
 {
@@ -68,8 +69,8 @@ class PostActions extends Column
                         ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ' . $item['main_title']),
-                            'message' => __('Are you sure you wan\'t to delete a ' . $item['main_title'] . ' record?'),
+                            'title' => __('Delete ' . $item[PostInterface::KEY_TITLE]),
+                            'message' => __('Are you sure you wan\'t to delete a ' . $item[PostInterface::KEY_TITLE] . ' record?'),
                         ],
                         'hidden' => false,
                     ];
