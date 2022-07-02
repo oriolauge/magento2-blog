@@ -59,8 +59,8 @@ class Save extends Action
         if ($data) {
             $params = [];
             $postData = $this->postFactory->create();
-            if (!empty($data['post']['store_id'])) {
-                $storeId = (int) $data['post']['store_id'];
+            if (!empty($data['store_id'])) {
+                $storeId = (int) $data['store_id'];
                 $params['store'] = $storeId;
             } else {
                 $storeId = Store::DEFAULT_STORE_ID;
@@ -70,15 +70,15 @@ class Save extends Action
             $this->storeManager->setCurrentStore($store->getCode());
 
             $postData->setStoreId($storeId);
-            if (empty($data['post']['entity_id'])) {
-                $data['post']['entity_id'] = null;
+            if (empty($data['entity_id'])) {
+                $data['entity_id'] = null;
                 $postData->setAttributeSetId($postData->getDefaultAttributeSetId());
             } else {
-                $postData->load($data['post']['entity_id']);
-                $params['entity_id'] = $data['post']['entity_id'];
+                $postData->load($data['entity_id']);
+                $params['entity_id'] = $data['entity_id'];
             }
 
-            $postData->addData($data['post']);
+            $postData->addData($data);
 
             /**
              * Check "Use Default Value" checkboxes values

@@ -43,7 +43,7 @@ class Eav implements ModifierInterface
     /**
      * Holds post data scope
      */
-    const DATA_SCOPE_PRODUCT = 'data.post';
+    const DATA_SCOPE_PRODUCT = 'data';
 
     /**
      * Holds container prefix for meta attributes
@@ -303,8 +303,26 @@ class Eav implements ModifierInterface
             case 'datetime':
                 $meta = $this->customizeDatetimeAttribute($meta);
                 break;
+            case 'media_image':
+                $meta = $this->customizeMediaImage($attribute, $meta);
+                break;
         }
 
+        return $meta;
+    }
+
+    /**
+     * Customize media attribute
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeMediaImage(EavAttributeInterface $attribute, array $meta): array
+    {
+        $meta['arguments']['data']['config']['formElement'] = 'fileUploader';
+        $meta['arguments']['data']['config']['elementTmpl'] = 'ui/form/element/uploader/uploader';
+        $meta['arguments']['data']['config']['previewTmpl'] = 'Magento_Catalog/image-preview';
+        $meta['arguments']['data']['config']['uploaderConfig']['url'] = 'oag_blog/post/upload/param_name/' . $attribute->getAttributeCode();
         return $meta;
     }
 
@@ -337,7 +355,8 @@ class Eav implements ModifierInterface
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         /**
-         * @todo: you need to create a textarea attribute to debug and configure this param
+         * @todo: you need to improve this array to make more
+         * customizable with attribute values
          */
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
@@ -481,7 +500,7 @@ class Eav implements ModifierInterface
     {
         $post = $this->getCurrentPost();
         if ($post) {
-            $data[$post->getId()]['post'] = $post->getData();
+            $data[$post->getId()] = $post->getData();
         }
         return $data;
     }

@@ -66,13 +66,12 @@ class PostSetup extends EavSetup
             'visible' => '1',
             'wysiwyg_enabled' => '0',
         ];
-        
 
         $attributes[PostInterface::KEY_PUBLISHED_AT] = [
             'group' => 'General',
             'type' => 'datetime',
             'label' => 'Published at',
-            'input' => 'date',
+            'input' => 'datetime',
             'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
             'required' => '1',
             'backend' => Datetime::class,
@@ -87,7 +86,6 @@ class PostSetup extends EavSetup
 
 
         //Content
-
         $attributes[PostInterface::KEY_SHORT_CONTENT] = [
             'group' => 'Content',
             'type' => 'text',
