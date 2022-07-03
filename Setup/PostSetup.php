@@ -9,6 +9,7 @@ use Magento\Eav\Setup\EavSetup;
 use OAG\Blog\Api\Data\PostInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Attribute\Backend\Datetime;
+use OAG\Blog\Model\Post\Attribute\Backend\Image;
 
 class PostSetup extends EavSetup
 {
@@ -122,8 +123,9 @@ class PostSetup extends EavSetup
             'group' => 'Content',
             'type' => 'varchar',
             'label' => 'Image',
-            'input' => 'media_image',
+            'input' => 'image',
             'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'backend' => Image::class,
             'required' => '0',
             'user_defined' => false,
             'default' => '',

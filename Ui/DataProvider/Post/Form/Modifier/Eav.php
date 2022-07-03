@@ -303,7 +303,7 @@ class Eav implements ModifierInterface
             case 'datetime':
                 $meta = $this->customizeDatetimeAttribute($meta);
                 break;
-            case 'media_image':
+            case 'image':
                 $meta = $this->customizeMediaImage($attribute, $meta);
                 break;
         }

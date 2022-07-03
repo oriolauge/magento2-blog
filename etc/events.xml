@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="oag_blog_api_data_postinterface_save_before">
+        <observer name="oag_blog_post_save_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+    </event>
+    <event name="oag_blog_api_data_postinterface_save_after">
+        <observer name="oag_blog_post_save_after" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+    </event>
+    <event name="oag_blog_api_data_postinterface_delete_before">
+        <observer name="oag_blog_post_delete_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="oag_blog_api_data_postinterface_delete_after">
+        <observer name="oag_blog_post_delete_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+    </event>
+    <event name="oag_blog_api_data_postinterface_load_after">
+        <observer name="oag_blog_post_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
+</config>
