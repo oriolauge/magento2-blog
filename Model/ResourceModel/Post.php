@@ -48,9 +48,6 @@ class Post extends AbstractEntity
 
     /**
      * Set attribute set id and entity type id value
-     * 
-     * @todo: move this function to other place because when we change the save logic to
-     * getEntityManager()->save, this function seems is not used anymore
      *
      * @param \Magento\Framework\DataObject $customer
      * @return $this
