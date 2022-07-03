@@ -7,7 +7,6 @@
     <preference for="OAG\Blog\Api\PostAttributeGroupRepositoryInterface" type="OAG\Blog\Model\PostAttributeGroupRepository" />
     <preference for="OAG\Blog\Api\PostAttributeRepositoryInterface" type="OAG\Blog\Model\PostAttributeRepository" />
 
-
     <!-- Necessary to find and redirect to the correct url when user change store -->
     <type name="Magento\Store\Model\StoreSwitcher">
         <arguments>
@@ -45,6 +44,43 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="OAG\Blog\Api\Data\PostInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
+        </arguments>
+    </type>
+
+    <!-- We will reuse the Catalog Image uploader to manage our blog images -->
+    <virtualType name="OAG\Blog\PostImageUpload" type="Magento\Catalog\Model\ImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">blog/tmp/post</argument>
+            <argument name="basePath" xsi:type="string">blog/post</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+                <item name="webp" xsi:type="string">webp</item>
+            </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
+                <item name="webp" xsi:type="string">image/webp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- With this configuration, we will define imageUploader constructor argument
+    with our virtual class -->
+    <type name="OAG\Blog\Controller\Adminhtml\Post\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">OAG\Blog\PostImageUpload</argument>
+        </arguments>
+    </type>
+
+    <!-- Also, we need to configure the same argument to our backend image class -->
+    <type name="OAG\Blog\Model\Post\Attribute\Backend\Image">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">OAG\Blog\PostImageUpload</argument>
         </arguments>
     </type>
 
