@@ -16,8 +16,12 @@ php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 php bin/magento cache:flush
 ```
+Also, you need to add the next line in .gitignore to exclude media blog files: ```/pub/media/blog/*```
 ## Uninstalation guide
-You can execute command ```php bin/magento module:uninstall OAG_Blog``` to uninstall module. WARNING/TODO: We don't finish the uninstall script!
+You can execute command ```php bin/magento module:uninstall OAG_Blog``` to uninstall module.
+Also, remove the line ```/pub/media/blog/*``` in .gitignore if you added it.
+
+***WARNING/TODO***: We don't finish the uninstall script (missign config values)
 
 ## Key Features
 TODO

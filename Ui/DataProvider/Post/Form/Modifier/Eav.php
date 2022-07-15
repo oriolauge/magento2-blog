@@ -27,6 +27,9 @@ use OAG\Blog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use OAG\Blog\Ui\DataProvider\EavValidationRules;
 use OAG\Blog\Model\PostFactory;
+use OAG\Blog\Model\Post\Attribute\Backend\Image as ImageBackendModel;
+use OAG\Blog\Model\Post\FileInfo;
+use OAG\Blog\Model\Post\Image;
 
 /**
  * Class Eav data provider for post editing form
@@ -140,6 +143,16 @@ class Eav implements ModifierInterface
      */
     protected $postFactory;
 
+    /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
+     * @var Image
+     */
+    private $postImage;
+
     public function __construct(
         CollectionFactory $collection,
         RequestInterface $request,
@@ -154,6 +167,8 @@ class Eav implements ModifierInterface
         ScopeOverriddenValue $scopeOverriddenValue,
         EavValidationRules $eavValidationRules,
         PostFactory $postFactory,
+        FileInfo $fileInfo,
+        Image $postImage,
         AttributeCollectionFactory $attributeCollectionFactory = null
     )
     {
@@ -170,6 +185,8 @@ class Eav implements ModifierInterface
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->eavValidationRules = $eavValidationRules;
         $this->postFactory = $postFactory;
+        $this->fileInfo = $fileInfo;
+        $this->postImage = $postImage;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
@@ -320,6 +337,7 @@ class Eav implements ModifierInterface
     private function customizeMediaImage(EavAttributeInterface $attribute, array $meta): array
     {
         $meta['arguments']['data']['config']['formElement'] = 'fileUploader';
+        $meta['arguments']['data']['config']['dataType'] = 'string';
         $meta['arguments']['data']['config']['elementTmpl'] = 'ui/form/element/uploader/uploader';
         $meta['arguments']['data']['config']['previewTmpl'] = 'Magento_Catalog/image-preview';
         $meta['arguments']['data']['config']['uploaderConfig']['url'] = 'oag_blog/post/upload/param_name/' . $attribute->getAttributeCode();
@@ -500,9 +518,54 @@ class Eav implements ModifierInterface
     {
         $post = $this->getCurrentPost();
         if ($post) {
-            $data[$post->getId()] = $post->getData();
+            $postData = $post->getData();
+            $postData = $this->convertValues($post, $postData);
+            $data[$post->getId()] = $postData;
         }
         return $data;
+    }
+
+    /**
+     * Converts post image data to acceptable for rendering format
+     *
+     * @param PostInterface $post
+     * @param array $postData
+     * @return array
+     */
+    protected function convertValues(PostInterface $post, $postData): array
+    {
+        foreach ($this->getGroups() as $groupCode => $group) {
+            $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
+            if ($attributes) {
+                $postData = $this->getAttributeData($attributes, $postData, $post);
+            }
+        }
+        return $postData;
+    }
+
+    protected function getAttributeData(
+        array $attributes,
+        array $postData,
+        PostInterface $post
+    ): array
+    {
+        foreach ($attributes as $sortOrder => $attribute) {
+            if ($attribute->getBackend() instanceof ImageBackendModel) {
+                $attributeCode = $attribute->getAttributeCode();
+                unset($postData[$attributeCode]);
+                $fileName = $post->getData($attributeCode);
+                if ($this->fileInfo->isExist($fileName)) {
+                    $stat = $this->fileInfo->getStat($fileName);
+                    $mime = $this->fileInfo->getMimeType($fileName);
+                    $postData[$attributeCode][0]['name'] = basename($fileName);
+                    $postData[$attributeCode][0]['url'] = $this->postImage->getUrl($post, $attributeCode);
+                    $postData[$attributeCode][0]['size'] = $stat['size'];
+                    $postData[$attributeCode][0]['type'] = $mime;
+                }
+            }
+        }
+
+        return $postData;
     }
 
     /**
