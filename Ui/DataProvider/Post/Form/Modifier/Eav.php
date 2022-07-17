@@ -552,9 +552,9 @@ class Eav implements ModifierInterface
         foreach ($attributes as $sortOrder => $attribute) {
             if ($attribute->getBackend() instanceof ImageBackendModel) {
                 $attributeCode = $attribute->getAttributeCode();
-                unset($postData[$attributeCode]);
                 $fileName = $post->getData($attributeCode);
-                if ($this->fileInfo->isExist($fileName)) {
+                if ($fileName && $this->fileInfo->isExist($fileName)) {
+                    unset($postData[$attributeCode]);
                     $stat = $this->fileInfo->getStat($fileName);
                     $mime = $this->fileInfo->getMimeType($fileName);
                     $postData[$attributeCode][0]['name'] = basename($fileName);
