@@ -20,6 +20,13 @@ interface PostInterface extends ExtensibleDataInterface
     const KEY_STATUS = 'status';
     const KEY_PUBLISHED_AT = 'published_at';
     const KEY_IMAGE = 'image';
+    const KEY_IMAGE_ALT = 'image_alt';
+    const KEY_LIST_IMAGE = 'list_image';
+    const KEY_LIST_IMAGE_ALT = 'list_image_alt';
+    const KEY_OPEN_GRAPH_TITLE = 'open_graph_title';
+    const KEY_OPEN_GRAPH_DESCRIPTION = 'open_graph_description';
+    const KEY_OPEN_GRAPH_IMAGE = 'open_graph_image';
+
 
     /**
      * @return int

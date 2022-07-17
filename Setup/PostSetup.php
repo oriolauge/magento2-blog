@@ -71,7 +71,7 @@ class PostSetup extends EavSetup
         $attributes[PostInterface::KEY_PUBLISHED_AT] = [
             'group' => 'General',
             'type' => 'datetime',
-            'label' => 'Published at',
+            'label' => 'Published At',
             'input' => 'datetime',
             'global' => ScopedAttributeInterface::SCOPE_WEBSITE,
             'required' => '1',
@@ -136,11 +136,60 @@ class PostSetup extends EavSetup
             'wysiwyg_enabled' => '0',
         ];
 
+        $attributes[PostInterface::KEY_IMAGE_ALT] = [
+            'group' => 'Content',
+            'type' => 'varchar',
+            'label' => 'Image Alt',
+            'input' => 'text',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '30',
+            'note' => 'Leave blank to use Title by default.',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
+        $attributes[PostInterface::KEY_LIST_IMAGE] = [
+            'group' => 'Content',
+            'type' => 'varchar',
+            'label' => 'List Image',
+            'input' => 'image',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'backend' => Image::class,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '40',
+            'note' => '',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
+        $attributes[PostInterface::KEY_LIST_IMAGE_ALT] = [
+            'group' => 'Content',
+            'type' => 'varchar',
+            'label' => 'List Image Alt',
+            'input' => 'text',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '50',
+            'note' => 'Leave blank to use Title by default.',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
         //Search Engine Optimization attributes
         $attributes[PostInterface::KEY_URL_KEY] = [
             'group' => 'Search Engine Optimization',
             'type' => 'varchar',
-            'label' => 'URL key',
+            'label' => 'URL Key',
             'input' => 'text',
             'global' => ScopedAttributeInterface::SCOPE_STORE,
             'required' => '0',
@@ -201,6 +250,54 @@ class PostSetup extends EavSetup
             'wysiwyg_enabled' => '0',
         ];
 
+        $attributes[PostInterface::KEY_OPEN_GRAPH_TITLE] = [
+            'group' => 'Open Graph Metadata',
+            'type' => 'text',
+            'label' => 'Open Graph Title',
+            'input' => 'text',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '10',
+            'note' => 'Leave blank to use Meta Title by default.',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
+        $attributes[PostInterface::KEY_OPEN_GRAPH_DESCRIPTION] = [
+            'group' => 'Open Graph Metadata',
+            'type' => 'text',
+            'label' => 'Open Graph Description',
+            'input' => 'textarea',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '20',
+            'note' => 'Leave blank to use Meta Description by default.',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
+
+        $attributes[PostInterface::KEY_OPEN_GRAPH_IMAGE] = [
+            'group' => 'Open Graph Metadata',
+            'type' => 'text',
+            'label' => 'Open Graph Image',
+            'input' => 'image',
+            'global' => ScopedAttributeInterface::SCOPE_STORE,
+            'backend' => Image::class,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '30',
+            'note' => 'Leave blank to use Image by default.',
+            'visible' => '1',
+            'wysiwyg_enabled' => '0',
+        ];
         // Add your more entity attributes here...
 
         return $attributes;
