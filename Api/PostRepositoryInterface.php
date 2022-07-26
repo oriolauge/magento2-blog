@@ -8,19 +8,27 @@ interface PostRepositoryInterface
     /**
      * @param int $id
      * @param int $storeId
-     * @return \OAG\Blog\Api\Data\PostInterface
+     * @return PostInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id, $storeId = null);
+
+    /**
+     * Get a new post with empty data (not inizializate)
+     *
+     * @param int $storeId
+     * @return PostInterface
+     */
+    public function createEmptyPost($storeId = null);
  
     /**
-     * @param \OAG\Blog\Api\Data\PostInterface $post
-     * @return \OAG\Blog\Api\Data\PostInterface
+     * @param PostInterface $post
+     * @return PostInterface
      */
     public function save(PostInterface $post);
  
     /**
-     * @param \OAG\Blog\Api\Data\PostInterface $post
+     * @param PostInterface $post
      * @return void
      */
     public function delete(PostInterface $post);

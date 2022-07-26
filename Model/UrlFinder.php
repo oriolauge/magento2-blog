@@ -65,19 +65,6 @@ class UrlFinder implements UrlFinderInterface
                 'controller' => 'index',
                 'action' => 'index'
             ];
-        } else if (count($urlExplode) == 1) {
-            //Check blog url
-            $storeId = $this->storeManager->getStore()->getId();
-            $postId = $this->getPostIdByUrlKey(array_pop($urlExplode), $storeId);
-            if ($postId) {
-                return [
-                    'controller' => 'post',
-                    'action' => 'view',
-                    'extra_params' => [
-                        'id' => $postId
-                    ]
-                ];
-            }
         }
         return null;
     }

@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
 use Magento\Widget\Model\Template\Filter;
+use Magento\Store\Model\Store;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -129,6 +130,16 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
+     * @inheritDoc
+     *
+     * @return void
+     */
+    public function getUrlKey()
+    {
+        return $this->_getData(self::KEY_URL_KEY);
+    }
+
+    /**
      * Get Title
      *
      * @return string
@@ -174,5 +185,17 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         }
 
         return $content;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @todo: improve this function and get option to configure stores/websites
+     * to show the blog post
+     * @return array
+     */
+    public function getStores()
+    {
+        return [Store::DEFAULT_STORE_ID];
     }
 }

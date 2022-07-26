@@ -75,6 +75,15 @@ class Post extends AbstractEntity
     }
 
     /**
+     * @inheritdoc
+     */
+    public function delete($object)
+    {
+        $this->getEntityManager()->delete($object);
+        return $this;
+    }
+
+    /**
      * Returns EntityManager object
      *
      * @return EntityManager
