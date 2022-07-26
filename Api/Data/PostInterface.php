@@ -85,4 +85,15 @@ interface PostInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getContent($processHtml = true);
+
+    /**
+     * @return string
+     */
+    public function getUrlKey();
+
+    /**
+     * Get all stores that post can be displayed
+     * @return array
+     */
+    public function getStores();
 }

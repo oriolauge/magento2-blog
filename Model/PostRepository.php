@@ -66,6 +66,18 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function createEmptyPost($storeId = null)
+    {
+        $post = $this->postFactory->create();
+        if (null !== $storeId) {
+            $post->setStoreId($storeId);
+        }
+        return $post;
+    }
+
+    /**
      * @inheritdoc
      */
     public function save(PostInterface $post)

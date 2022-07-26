@@ -108,11 +108,8 @@ class Edit extends Action
 
                 return $resultRedirect->setPath('*/*/');
             }
-        }
-
-        $data = $this->_session->getFormData(true);
-        if (!empty($data)) {
-            $postData->addData($data);
+        } else {
+            $postData = $this->postRepository->createEmptyPost();
         }
 
         $this->_coreRegistry->register('entity_id', $id);

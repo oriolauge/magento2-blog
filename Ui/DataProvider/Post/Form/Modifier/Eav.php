@@ -30,6 +30,7 @@ use OAG\Blog\Model\PostFactory;
 use OAG\Blog\Model\Post\Attribute\Backend\Image as ImageBackendModel;
 use OAG\Blog\Model\Post\FileInfo;
 use OAG\Blog\Model\Post\Image;
+use Magento\Backend\Model\Session;
 
 /**
  * Class Eav data provider for post editing form
@@ -153,6 +154,18 @@ class Eav implements ModifierInterface
      */
     private $postImage;
 
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * Save new post with tmp form data to show in edit form
+     *
+     * @var PostInterface
+     */
+    protected $newPost;
+
     public function __construct(
         CollectionFactory $collection,
         RequestInterface $request,
@@ -169,6 +182,7 @@ class Eav implements ModifierInterface
         PostFactory $postFactory,
         FileInfo $fileInfo,
         Image $postImage,
+        Session $session,
         AttributeCollectionFactory $attributeCollectionFactory = null
     )
     {
@@ -187,6 +201,7 @@ class Eav implements ModifierInterface
         $this->postFactory = $postFactory;
         $this->fileInfo = $fileInfo;
         $this->postImage = $postImage;
+        $this->session = $session;
         $this->attributeCollectionFactory = $attributeCollectionFactory
             ?: ObjectManager::getInstance()->get(AttributeCollectionFactory::class);
     }
@@ -706,7 +721,16 @@ class Eav implements ModifierInterface
          * For create new post option
          */
         if (!($id = $this->request->getParam('entity_id'))) {
-            return $this->postFactory->create();
+            if (!$this->newPost) {
+                $this->newPost = $this->postRepository->createEmptyPost();
+
+                $data = $this->session->getFormData(true);
+                //var_dump($data); // die("sdsad");
+                if (!empty($data)) {
+                    $this->newPost->addData($data);
+                }
+            }
+            return $this->newPost;
         }
 
         $storeId = (int) $this->request->getParam('store');
