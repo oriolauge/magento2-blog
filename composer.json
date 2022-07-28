@@ -7,12 +7,6 @@
         "magento/framework": "103.0.*",
         "oag/module-blog-url-rewrite": "0.0.*"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/oriolauge/magento2-blog-url-rewrite"
-        }
-    ],
     "autoload": {
         "files": [
             "registration.php"
