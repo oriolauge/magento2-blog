@@ -5,7 +5,7 @@
 namespace OAG\Blog\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Api\UrlFinderInterface;
-use OAG\Blog\Model\Config;
+use OAG\BlogUrlRewrite\Model\Config;
 use OAG\Blog\Model\ResourceModel\Post\Collection as PostCollection;
 
 class UrlFinder implements UrlFinderInterface
@@ -87,31 +87,5 @@ class UrlFinder implements UrlFinderInterface
         }
 
         return true;
-    }
-
-    /**
-     * Return post id
-     *
-     * @param string $urlKey
-     * @return int|null
-     */
-    public function getPostIdByUrlKey(string $urlKey, $storeId): ?int
-    {
-        //remove sufix url
-        $urlBlog = str_replace(
-            $this->config->getPostSufix()
-            , ''
-            , $urlKey
-        );
-        $this->postCollection
-            ->setStoreId($storeId)
-            ->addFieldToFilter('url_key', ['eq' => $urlBlog]);
-        $ids = $this->postCollection->getAllIds();
-        //return the first one
-        if (is_array($ids) && count($ids) > 0) {
-            return $ids[0];
-        }
-
-        return null;
     }
 }

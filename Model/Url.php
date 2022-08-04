@@ -1,8 +1,8 @@
 <?php
 
 namespace OAG\Blog\Model;
-use OAG\Blog\Model\Post;
-use OAG\Blog\Model\Config;
+use OAG\Blog\Api\Data\PostInterface;
+use OAG\BlogUrlRewrite\Model\PostUrlPathGenerator;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -16,17 +16,17 @@ class Url
     protected $url;
 
     /**
-     * @param Config
+     * @param PostUrlPathGenerator
      */
-    protected $config;
+    protected $postUrlPathGenerator;
 
     public function __construct(
         UrlInterface $url,
-        Config $config
+        PostUrlPathGenerator $postUrlPathGenerator
     )
     {
         $this->url = $url;
-        $this->config = $config;
+        $this->postUrlPathGenerator = $postUrlPathGenerator;
     }
 
     /**
@@ -35,13 +35,10 @@ class Url
      * @param Post $post
      * @return void
      */
-    public function getPostUrl(Post $post): string
+    public function getPostUrl(PostInterface $post): string
     {
         return $this->url->getUrl('', [ '_direct' => 
-            $this->config->getBlogRoute()
-            . '/'
-            . $post->getUrlKey()
-            . $this->config->getPostSufix()
+            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post)
         ]);
     }
 }

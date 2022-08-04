@@ -13,10 +13,6 @@
             <general>
                 <enabled>0</enabled>
             </general>
-            <permalink>
-                <route>blog</route>
-                <post_sufix>.html</post_sufix>
-            </permalink>
         </oag_blog>
     </default>
 </config>

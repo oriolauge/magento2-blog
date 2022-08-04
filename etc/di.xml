@@ -7,14 +7,6 @@
     <preference for="OAG\Blog\Api\PostAttributeGroupRepositoryInterface" type="OAG\Blog\Model\PostAttributeGroupRepository" />
     <preference for="OAG\Blog\Api\PostAttributeRepositoryInterface" type="OAG\Blog\Model\PostAttributeRepository" />
 
-    <!-- Necessary to find and redirect to the correct url when user change store -->
-    <type name="Magento\Store\Model\StoreSwitcher">
-        <arguments>
-            <argument name="storeSwitchers" xsi:type="array">
-                <item name="oagBlogRewriteUrl" xsi:type="object">OAG\Blog\Model\StoreSwitcher\RewriteUrl</item>
-            </argument>
-        </arguments>
-    </type>
     <!-- Define contract between API Data and his repository -->
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>

@@ -16,18 +16,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="permalink" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Permalink Settings</label>
-                <field id="route" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Blog Route</label>
-                    <validate>required-entry no-whitespace</validate>
-                    <comment>E.g.: "blog" will make the blog accessible from mystore.com/blog</comment>
-                </field>
-                <field id="post_sufix" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Post URL Suffix</label>
-                    <comment>E.g.: ".html" will make the blog post accessible from mystore.com/{blog_route}/post-identifier.html</comment>
-                </field>
-            </group>
         </section>
     </system>
 </config>
