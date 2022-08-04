@@ -151,6 +151,31 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getMetaTitle()
+    {
+        $metaTitle = $this->_getData(self::KEY_META_TITLE);
+        return $metaTitle ?: $this->getTitle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMetaKeywords()
+    {
+        return $this->_getData(self::KEY_META_KEYWORDS);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMetaDescription()
+    {
+        return $this->_getData(self::KEY_META_DESCRIPTION);
+    }
+
+    /**
      * Set title
      *
      * @return string

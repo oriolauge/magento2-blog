@@ -97,4 +97,27 @@ interface PostInterface extends ExtensibleDataInterface
      * @return int
      */
     public function getStoreId();
+
+    /**
+     * Return Meta title value
+     * 
+     * If Meta title is empty, we will return title by default
+     *
+     * @return string
+     */
+    public function getMetaTitle();
+
+    /**
+     * Return Meta keywords value
+     *
+     * @return string
+     */
+    public function getMetaKeywords();
+
+    /**
+     * Return Meta description value
+     *
+     * @return string
+     */
+    public function getMetaDescription();
 }
