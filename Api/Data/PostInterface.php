@@ -92,8 +92,9 @@ interface PostInterface extends ExtensibleDataInterface
     public function getUrlKey();
 
     /**
-     * Get all stores that post can be displayed
-     * @return array
+     * Get store Id
+     *
+     * @return int
      */
-    public function getStores();
+    public function getStoreId();
 }

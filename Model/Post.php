@@ -186,16 +186,4 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
 
         return $content;
     }
-
-    /**
-     * @inheritDoc
-     *
-     * @todo: improve this function and get option to configure stores/websites
-     * to show the blog post
-     * @return array
-     */
-    public function getStores()
-    {
-        return [Store::DEFAULT_STORE_ID];
-    }
 }
