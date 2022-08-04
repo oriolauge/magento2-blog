@@ -5,7 +5,6 @@
 
 namespace OAG\Blog\Controller;
 
-use Magefan\Blog\Model\Config\Source\BlogPages;
 use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
