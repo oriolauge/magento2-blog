@@ -116,7 +116,7 @@ class PostSetup extends EavSetup
             'sort_order' => '20',
             'note' => '',
             'visible' => '1',
-            'wysiwyg_enabled' => '1',
+            'wysiwyg_enabled' => '1'
         ];
 
         $attributes[PostInterface::KEY_IMAGE] = [

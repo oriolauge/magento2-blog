@@ -42,6 +42,24 @@ class InstallData implements InstallDataInterface
 
         $setup->startSetup();
         $postSetup->installEntities();
+
+        /**
+         * This params needs to be updated here because the attribute "is_pagebuilder_enabled"
+         * is not configured in any PropertyMapper. You can see an example in
+         * Magento\Catalog\Model\ResourceModel\Setup\PropertyMapper and di.xml in catalog module
+         *
+         * Also, We don't want to create a custom PropertyMapper bacause seems that this affect to
+         * all EAV install maps. You can see in Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite
+         * in map function that has an foreach for propertyMappers property that check all di.xml
+         * PropertyMapper\Composite classes configured.
+         */
+        $postSetup->updateAttribute(
+            PostSetup::ENTITY_TYPE_CODE,
+            'content',
+            [
+                'is_pagebuilder_enabled' => 1
+            ]
+        );
         $setup->endSetup();
     }
 }

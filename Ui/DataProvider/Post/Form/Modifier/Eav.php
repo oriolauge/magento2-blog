@@ -387,20 +387,33 @@ class Eav implements ModifierInterface
 
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
+
         /**
          * @todo: you need to improve this array to make more
          * customizable with attribute values
          */
-        $meta['arguments']['data']['config']['wysiwygConfigData'] = [
-            'add_variables' => false,
-            'add_widgets' => false,
-            'add_directives' => true,
-            'use_container' => true,
-            'container_class' => 'admin__field-wide',
-            'is_pagebuilder_enabled' => true,
-            'pagebuilder_content_snapshot' => true,
-            'pagebuilder_button' => true
-        ];
+        if ($attribute->getData('is_pagebuilder_enabled')) {
+            $meta['arguments']['data']['config']['wysiwygConfigData'] = [
+                'add_variables' => false,
+                'add_widgets' => false,
+                'add_directives' => true,
+                'use_container' => true,
+                'container_class' => 'admin__field-wide',
+                'is_pagebuilder_enabled' => true,
+                'pagebuilder_content_snapshot' => true,
+                'pagebuilder_button' => true
+            ];
+        } else {
+            $meta['arguments']['data']['config']['wysiwygConfigData'] = [
+                'add_variables' => true,
+                'add_widgets' => true,
+                'add_directives' => true,
+                'use_container' => false,
+                'container_class' => 'admin__field-wide',
+                'is_pagebuilder_enabled' => false,
+                'height' => '200px'
+            ];
+        }
 
         return $meta;
     }

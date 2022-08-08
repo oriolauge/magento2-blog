@@ -103,6 +103,12 @@ class EavTablesSetup
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Attribute uses WYSIWYG'
             )->addColumn(
+                'is_pagebuilder_enabled',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is PageBuilder Enabled'
+            )->addColumn(
                 'validate_rules',
                 Table::TYPE_TEXT,
                 '64k',
