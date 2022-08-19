@@ -1,7 +1,6 @@
 <?php
 namespace OAG\Blog\Setup;
 
-use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Framework\Setup\UninstallInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -12,6 +11,8 @@ use OAG\Blog\Setup\PostSetup;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Config\Model\ResourceModel\Config\Data as ConfigResourceData;
+use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigCollectionFactory;
 
 class Uninstall implements UninstallInterface
 {
@@ -46,6 +47,16 @@ class Uninstall implements UninstallInterface
     protected $filterBuilder;
 
     /**
+     * @var ConfigCollectionFactory
+     */
+    protected $configCollectionFactory;
+
+    /**
+     * @var ConfigResourceData
+     */
+    protected $configResourceData;
+
+    /**
      * Construct function
      *
      * @param CollectionFactory $eavCollectionFactory
@@ -61,7 +72,9 @@ class Uninstall implements UninstallInterface
         EavTablesSetupFactory $eavTablesSetupFactory,
         BookmarkRepositoryInterface $bookmarkRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        ConfigCollectionFactory $configCollectionFactory,
+        ConfigResourceData $configResourceData
     )
     {
         $this->eavCollectionFactory = $eavCollectionFactory;
@@ -70,6 +83,8 @@ class Uninstall implements UninstallInterface
         $this->bookmarkRepository = $bookmarkRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->configCollectionFactory = $configCollectionFactory;
+        $this->configResourceData = $configResourceData;
     }
 
     /**
@@ -115,6 +130,16 @@ class Uninstall implements UninstallInterface
         foreach ($bookmarkUi->getItems() as $bookmark) {
             $this->bookmarkRepository->delete($bookmark);
         }
-    }
 
+        /**
+         * Remove config values from core_config_data table.
+         * 
+         * This remove OAG_Blog module and all related modules like OAG_BlogUrlRewrite
+         */
+        $configCollection = $this->configCollectionFactory->create()
+            ->addPathFilter('oag_blog');
+        foreach ($configCollection as $config) {
+            $this->configResourceData->delete($config);
+        }
+    }
 }
