@@ -5,6 +5,10 @@
             <general>
                 <enabled>0</enabled>
             </general>
+            <index_page>
+                <title>Blog</title>
+                <posts_per_page>10</posts_per_page>
+            </index_page>
         </oag_blog>
     </default>
 </config>
