@@ -169,7 +169,7 @@ class Attribute extends EavAttribute implements ScopedAttributeInterface, EavAtt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete()
     {
@@ -177,9 +177,20 @@ class Attribute extends EavAttribute implements ScopedAttributeInterface, EavAtt
         return parent::afterDelete();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getIsWysiwygEnabled()
     {
         return $this->getData(self::IS_WYSIWYG_ENABLED);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsPageBuilderEnabled()
+    {
+        return $this->getData(self::IS_PAGEBUILDER_ENABLED);
     }
 
     /**

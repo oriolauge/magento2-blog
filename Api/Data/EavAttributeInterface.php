@@ -17,12 +17,21 @@ interface EavAttributeInterface extends AttributeInterface
 
     const SCOPE_WEBSITE_TEXT = 'website';
 
+    const IS_PAGEBUILDER_ENABLED = 'is_pagebuilder_enabled';
+
     /**
      * Enable WYSIWYG flag
      *
      * @return bool|null
      */
     public function getIsWysiwygEnabled();
+
+    /**
+     * Check if is pagebuilder enabled
+     *
+     * @return bool|null
+     */
+    public function getIsPageBuilderEnabled();
 
     /**
      * Return attribute scope

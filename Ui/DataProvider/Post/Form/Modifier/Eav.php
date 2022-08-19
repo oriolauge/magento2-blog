@@ -392,7 +392,7 @@ class Eav implements ModifierInterface
          * @todo: you need to improve this array to make more
          * customizable with attribute values
          */
-        if ($attribute->getData('is_pagebuilder_enabled')) {
+        if ($attribute->getIsPageBuilderEnabled()) {
             $meta['arguments']['data']['config']['wysiwygConfigData'] = [
                 'add_variables' => false,
                 'add_widgets' => false,
