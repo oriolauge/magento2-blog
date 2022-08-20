@@ -8,6 +8,7 @@
             <index_page>
                 <title>Blog</title>
                 <posts_per_page>10</posts_per_page>
+                <display_blog_summary>0</display_blog_summary>
             </index_page>
         </oag_blog>
     </default>

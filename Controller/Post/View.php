@@ -4,12 +4,14 @@ namespace OAG\Blog\Controller\Post;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\RequestInterface;
-use OAG\Blog\Api\PostRepositoryInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-use OAG\Blog\Api\Data\PostInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\UrlInterface;
+use OAG\Blog\Api\PostRepositoryInterface;
+use OAG\Blog\Api\Data\PostInterface;
+use OAG\Blog\Model\System\Config;
+use OAG\Blog\Model\Url as BlogUrl;
 
 /**
  * Blog home page view
@@ -42,6 +44,16 @@ class View implements HttpGetActionInterface
     protected $url;
 
     /**
+     * @var BlogUrl
+     */
+    protected $blogUrl;
+
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * @param RequestInterface $request
      */
     public function __construct(
@@ -49,7 +61,9 @@ class View implements HttpGetActionInterface
         PageFactory $resultPageFactory,
         PostRepositoryInterface $postRepository,
         ForwardFactory $forwardFactory,
-        UrlInterface $url
+        UrlInterface $url,
+        BlogUrl $blogUrl,
+        Config $config
     )
     {
         $this->request = $request;
@@ -57,6 +71,8 @@ class View implements HttpGetActionInterface
         $this->postRepository = $postRepository;
         $this->forwardFactory = $forwardFactory;
         $this->url = $url;
+        $this->blogUrl = $blogUrl;
+        $this->config = $config;
     }
 
     /**
@@ -115,13 +131,19 @@ class View implements HttpGetActionInterface
      * @param PostInterface $post
      * @return void
      */
-    protected function prepareBreadcrumb(Page $resultPage, PostInterface $post)
+    protected function prepareBreadcrumb(Page $resultPage, PostInterface $post): void
     {
         $breadcrumbs = $resultPage->getLayout()->getBlock('breadcrumbs');
         $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Home'),
                 'link' => $this->url->getUrl()
+            ]
+        );
+        $breadcrumbs->addCrumb('oag_blog', [
+                'label' => $this->config->getBlogTitle(),
+                'title' => $this->config->getBlogTitle(),
+                'link' => $this->blogUrl->getBlogIndexUrl()
             ]
         );
         $breadcrumbs->addCrumb('oag_blog_post', [

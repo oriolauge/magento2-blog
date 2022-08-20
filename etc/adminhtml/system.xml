@@ -40,6 +40,15 @@
                     <label>Meta Description</label>
                     <validate>validate-no-html-tags</validate>
                 </field>
+                <field id="display_blog_summary" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Blog Summary</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="summary_cms_block" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CMS Summary Block</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Block</source_model>
+                    <comment>Please make sure that CMS Block is enabled.</comment>
+                </field>
             </group>
         </section>
     </system>

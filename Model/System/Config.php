@@ -21,6 +21,16 @@ class Config
     const XML_PATH_INDEX_PAGE_META_TITLE = 'oag_blog/index_page/meta_title';
 
     /**
+     * Hold index page blog meta keywords config path
+     */
+    const XML_PATH_INDEX_PAGE_META_KEYWORDS = 'oag_blog/index_page/meta_keywords';
+
+    /**
+     * Hold index page blog meta description config path
+     */
+    const XML_PATH_INDEX_PAGE_META_DESCRIPTION = 'oag_blog/index_page/meta_description';
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -59,6 +69,34 @@ class Config
     {
         return $this->getConfig(
             self::XML_PATH_INDEX_PAGE_META_TITLE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get index page blog meta keywords config value
+     *
+     * @param mixed $storeId
+     * @return void
+     */
+    public function getBlogMetaKeywords($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_INDEX_PAGE_META_KEYWORDS,
+            $storeId
+        );
+    }
+
+    /**
+     * Get index page blog meta description config value
+     *
+     * @param mixed $storeId
+     * @return void
+     */
+    public function getBlogMetaDescription($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_INDEX_PAGE_META_DESCRIPTION,
             $storeId
         );
     }
