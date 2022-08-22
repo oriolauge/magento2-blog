@@ -31,6 +31,16 @@ class Config
     const XML_PATH_INDEX_PAGE_META_DESCRIPTION = 'oag_blog/index_page/meta_description';
 
     /**
+     * Hold index page blog display blog summary config path
+     */
+    const XML_PATH_INDEX_PAGE_DISPLAY_BLOG_SUMMARY = 'oag_blog/index_page/display_blog_summary';
+
+    /**
+     * Hold index page blog summary CMS block id config path
+     */
+    const XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK = 'oag_blog/index_page/summary_cms_block';
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -93,10 +103,39 @@ class Config
      * @param mixed $storeId
      * @return void
      */
+    public function getSummaryCmsBlock($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK,
+            $storeId
+        );
+    }
+
+    /**
+     * Get index page blog meta description config value
+     *
+     * @param mixed $storeId
+     * @return void
+     */
     public function getBlogMetaDescription($storeId = null)
     {
         return $this->getConfig(
             self::XML_PATH_INDEX_PAGE_META_DESCRIPTION,
+            $storeId
+        );
+    }
+
+    /**
+     * Get index page blog meta description config value
+     *
+     * @param mixed $storeId
+     * @return bool
+     */
+    public function canDisplayBlogSummary($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_INDEX_PAGE_DISPLAY_BLOG_SUMMARY,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
