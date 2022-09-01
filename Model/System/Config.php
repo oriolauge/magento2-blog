@@ -41,6 +41,16 @@ class Config
     const XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK = 'oag_blog/index_page/summary_cms_block';
 
     /**
+     * Hold topmenu show item config path
+     */
+    const XML_PATH_TOPMENU_SHOW_ITEM = 'oag_blog/topmenu/show_item';
+
+    /**
+     * Hold topmenu item text config path
+     */
+    const XML_PATH_TOPMENU_ITEM_TEXT = 'oag_blog/topmenu/item_text';
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -126,6 +136,20 @@ class Config
     }
 
     /**
+     * Get topmenu item text config value
+     *
+     * @param mixed $storeId
+     * @return void
+     */
+    public function getBlogTopmenuItemText($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_TOPMENU_ITEM_TEXT,
+            $storeId
+        );
+    }
+
+    /**
      * Get index page blog meta description config value
      *
      * @param mixed $storeId
@@ -135,6 +159,21 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_INDEX_PAGE_DISPLAY_BLOG_SUMMARY,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get topmenu show item config value
+     *
+     * @param mixed $storeId
+     * @return bool
+     */
+    public function canTopmenuShowItem($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_TOPMENU_SHOW_ITEM,
             ScopeInterface::SCOPE_STORE,
             $storeId
         );

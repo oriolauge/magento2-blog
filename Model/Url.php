@@ -58,7 +58,7 @@ class Url
     }
 
     /**
-     * Get main blog pageº
+     * Get main blog page
      *
      * @param mixed $storeId
      * @return string

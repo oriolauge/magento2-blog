@@ -50,6 +50,19 @@
                     <comment>Please make sure that CMS Block is enabled.</comment>
                 </field>
             </group>
+            <group id="topmenu" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Category Top Navigation</label>
+                <field id="show_item" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Blog Link</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="item_text" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Link Text</label>
+                    <depends>
+                        <field id="show_item">1</field>
+                    </depends>
+                </field>
+            </group>
         </section>
     </system>
 </config>

@@ -124,7 +124,7 @@ class Index implements HttpGetActionInterface
         $breadcrumbs = $resultPage->getLayout()->getBlock('breadcrumbs');
         $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
-                'title' => __('Home'),
+                'title' => __('Go to Home Page'),
                 'link' => $this->url->getUrl()
             ]
         );
