@@ -2,6 +2,7 @@
 namespace OAG\Blog\Model;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Data\Tree;
+use Magento\Framework\App\RequestInterface;
 use OAG\Blog\Model\System\Config;
 use OAG\Blog\Model\Url;
 
@@ -37,11 +38,11 @@ class Topmenu
      * Get Blog Node
      *
      * @param Node $menu
-     * @param [type] $request
+     * @param RequestInterface $request
      * @param Tree $tree
      * @return Node|null
      */
-    public function getBlogNode(Node $menu, $request, Tree $tree): ?Node
+    public function getBlogNode(Node $menu, RequestInterface $request, Tree $tree = null): ?Node
     {
         if (!$this->config->canTopmenuShowItem()) {
             return null;
@@ -53,7 +54,7 @@ class Topmenu
 
         $data = [
             'name'      => $this->config->getBlogTopmenuItemText(),
-            'id'        => 'oag-blog-topmenu-item',
+            'id'        => 'oag-blog-topmenu-main-item',
             'url'       => $this->url->getBlogIndexUrl(),
             'is_active' => ($request->getModuleName() == 'oagblog')
         ];
