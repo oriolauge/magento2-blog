@@ -1,6 +1,20 @@
 <div class="oag-blog-summary">
     <?= $block->getSummaryCmsBlockHtml(); ?>
 </div>
-<div class="oag-blog-list">
 
-</div>
+<?php $postSearchResult =  $block->getPostSearchResults(); ?>
+<?php if ($postSearchResult->getTotalCount() > 0): ?>
+    <div class="oag-blog-list">
+        <ul class="post-list"><!--
+            <?php foreach ($postSearchResult->getItems() as $post): ?>
+            --><li class="post-item"><?= $block->getPostHtml($post) ?></li><!--
+            <?php endforeach; ?>
+        --></ul>
+    </div>
+<?php else: ?>
+    <div class="message info empty">
+        <div>
+            <?= $block->escapeHtml(__('There are no posts at this moment.')) ?>
+        </div>
+    </div>
+<?php endif; ?>

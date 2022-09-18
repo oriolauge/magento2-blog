@@ -8,10 +8,10 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Widget\Model\Template\Filter;
 use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
-use Magento\Widget\Model\Template\Filter;
-use Magento\Store\Model\Store;
+use OAG\Blog\Model\Post\Image;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -41,6 +41,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     protected $templateFilter;
 
     /**
+     * @var Image
+     */
+    protected $image;
+
+    /**
      * Prefix of model events names
      *
      * @var string
@@ -52,12 +57,14 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         Registry $registry,
         Url $url,
         StoreManagerInterface $storeManager,
-        Filter $templateFilter
+        Filter $templateFilter,
+        Image $image
     )
     {
         $this->url = $url;
         $this->storeManager = $storeManager;
         $this->templateFilter = $templateFilter;
+        $this->image = $image;
         parent::__construct($context, $registry);
     }
 
@@ -200,7 +207,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getContent($processHtml = true)
     {
@@ -210,5 +217,54 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         }
 
         return $content;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getImageUrl()
+    {
+        if ($this->hasData(self::KEY_IMAGE)) {
+            return $this->image->getUrl($this);
+        }
+        return '';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getListImageUrl()
+    {
+        if ($this->hasData(self::KEY_LIST_IMAGE)) {
+            return $this->image->getUrl($this, self::KEY_LIST_IMAGE);
+        }
+        return '';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getListImageAlt()
+    {
+        if ($this->hasData(self::KEY_LIST_IMAGE_ALT)) {
+            return $this->_getData(self::KEY_LIST_IMAGE_ALT);
+        }
+        return $this->getTitle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShortContent()
+    {
+        return $this->_getData(self::KEY_SHORT_CONTENT);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPublishedAt($dateFormat = null)
+    {
+        return $this->_getData(self::KEY_PUBLISHED_AT);
     }
 }

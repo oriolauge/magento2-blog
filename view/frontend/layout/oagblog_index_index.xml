@@ -2,7 +2,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="OAG\Blog\Block\Index" name="oagblog_post_list_content" template="OAG_Blog::post/list.phtml" />
+            <block class="OAG\Blog\Block\Index" name="oagblog_post_list" template="OAG_Blog::post/list.phtml">
+                <block class="OAG\Blog\Block\Post\ListItem" name="oagblog_post_list_item" template="OAG_Blog::post/list/item.phtml"/>
+            </block>
         </referenceContainer>
     </body>
 </page>

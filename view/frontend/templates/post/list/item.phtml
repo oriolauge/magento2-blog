@@ -1,0 +1,23 @@
+<?php
+    $post = $block->getPost();
+    $postUrl = $block->escapeUrl($post->getUrl());
+    $postTitle = $block->escapeHtml($post->getTitle());
+?>
+<div class="post-item-wraper">
+    <div class="image-container">
+        <a href="<?= $postUrl ?>" title="<?= $post->getListImageAlt(); ?>">
+            <div class="image-background" style="background-image: url(<?= $post->getListImageUrl() ?>)"></div>
+        </a>
+    </div>
+    <div class="title">
+        <h2><a href="<?= $postUrl ?>" title="<?= $postTitle; ?>">
+            <?= $postTitle ?>
+        </a></h2>
+        <div class="publish-date">
+            <?= $this->getPublishedAtHtml(); ?>
+        </div>
+    </div>
+
+
+    <?= $post->getShortContent(); ?>
+</div>

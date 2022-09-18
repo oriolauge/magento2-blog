@@ -1,6 +1,7 @@
 <?php
 
 namespace OAG\Blog\Api;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use OAG\Blog\Api\Data\PostInterface;
 
 interface PostRepositoryInterface
@@ -32,4 +33,11 @@ interface PostRepositoryInterface
      * @return void
      */
     public function delete(PostInterface $post);
+
+    /**
+     * Get post list
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     */
+    public function getList(SearchCriteriaInterface $searchCriteria);
 }

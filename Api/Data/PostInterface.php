@@ -120,4 +120,40 @@ interface PostInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getMetaDescription();
+
+    /**
+     * Returns Post image url
+     *
+     * @return string
+     */
+    public function getImageUrl();
+
+    /**
+     * Returns Post list image url
+     *
+     * @return string
+     */
+    public function getListImageUrl();
+
+    /**
+     * Get Post list image alt
+     *
+     * @return string|null
+     */
+    public function getListImageAlt();
+
+    /**
+     * Get short content
+     *
+     * @return string|null
+     */
+    public function getShortContent();
+
+    /**
+     * Get published at
+     *
+     * @param string $dateFormat
+     * @return string
+     */
+    public function getPublishedAt($dateFormat = null);
 }

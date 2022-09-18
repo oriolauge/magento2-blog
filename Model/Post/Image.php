@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Image
 {
-    private const ATTRIBUTE_NAME = 'image';
     /**
      * @var FileInfo
      */
@@ -50,7 +49,7 @@ class Image
      * @return string
      * @throws LocalizedException
      */
-    public function getUrl(PostInterface $post, string $attributeCode = self::ATTRIBUTE_NAME): string
+    public function getUrl(PostInterface $post, string $attributeCode = PostInterface::KEY_IMAGE): string
     {
         $url = '';
         $image = $post->getData($attributeCode);

@@ -6,6 +6,7 @@
     <preference for="OAG\Blog\Api\Data\PostInterface" type="OAG\Blog\Model\Post" />
     <preference for="OAG\Blog\Api\PostAttributeGroupRepositoryInterface" type="OAG\Blog\Model\PostAttributeGroupRepository" />
     <preference for="OAG\Blog\Api\PostAttributeRepositoryInterface" type="OAG\Blog\Model\PostAttributeRepository" />
+    <preference for="OAG\Blog\Api\Data\PostSearchResultsInterface" type="OAG\Blog\Model\PostSearchResults" />
 
     <!-- Define contract between API Data and his repository -->
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
