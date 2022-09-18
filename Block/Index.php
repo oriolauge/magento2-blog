@@ -91,7 +91,7 @@ class Index extends Template
     {
         $postSearchResults = $this->postRepository->getList(
             $this->searchCriteriaBuilder
-                //->addFilter(PostInterface::KEY_STATUS, Boolean::VALUE_YES)
+                ->addFilter(PostInterface::KEY_STATUS, Boolean::VALUE_YES)
                 ->create()
         );
 

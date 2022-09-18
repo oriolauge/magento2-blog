@@ -8,6 +8,13 @@
     <preference for="OAG\Blog\Api\PostAttributeRepositoryInterface" type="OAG\Blog\Model\PostAttributeRepository" />
     <preference for="OAG\Blog\Api\Data\PostSearchResultsInterface" type="OAG\Blog\Model\PostSearchResults" />
 
+    <!-- Define collectionProcessor argument to use EAV SearchCriteria CollectionProcessor -->
+    <type name="OAG\Blog\Model\PostRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+
     <!-- Define contract between API Data and his repository -->
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
