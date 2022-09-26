@@ -2,15 +2,16 @@
     <?= $block->getSummaryCmsBlockHtml(); ?>
 </div>
 
-<?php $postSearchResult =  $block->getPostSearchResults(); ?>
-<?php if ($postSearchResult->getTotalCount() > 0): ?>
+<?php $postCollection =  $block->getPostCollection(); ?>
+<?php if ($postCollection->getSize() > 0): ?>
     <div class="oag-blog-list">
         <ul class="post-list"><!--
-            <?php foreach ($postSearchResult->getItems() as $post): ?>
+            <?php foreach ($postCollection as $post): ?>
             --><li class="post-item"><?= $block->getPostHtml($post) ?></li><!--
             <?php endforeach; ?>
         --></ul>
     </div>
+    <?= $block->getToolbarHtml() ?>
 <?php else: ?>
     <div class="message info empty">
         <div>

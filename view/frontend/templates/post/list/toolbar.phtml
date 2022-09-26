@@ -1,0 +1,12 @@
+<?php
+/**
+ * Blog post list toolbar template
+ *
+ * @var $block \OAG\Blog\Block\Post\ListItem\Toolbar
+ */
+?>
+<?php if ($block->getCollection()->getSize()) { ?>
+    <div class="toolbar toolbar-oagblog-posts">
+        <?= /*@noEscape*/ $block->getPagerHtml() ?>
+    </div>
+<?php } ?>

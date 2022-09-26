@@ -69,4 +69,15 @@ class Url
             $this->urlRewriteConfig->getBlogRoute($storeId)
         );
     }
+
+    /**
+     * Get relative main blog page
+     *
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getBlogIndexRelativeUrl($storeId = null): string
+    {
+        return $this->urlRewriteConfig->getBlogRoute($storeId) . '/';
+    }
 }

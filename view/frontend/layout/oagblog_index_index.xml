@@ -3,7 +3,21 @@
     <body>
         <referenceContainer name="content">
             <block class="OAG\Blog\Block\Index" name="oagblog_post_list" template="OAG_Blog::post/list.phtml">
-                <block class="OAG\Blog\Block\Post\ListItem" name="oagblog_post_list_item" template="OAG_Blog::post/list/item.phtml"/>
+                <block class="OAG\Blog\Block\Post\ListItem" name="oagblog_post_list_item" template="OAG_Blog::post/list/item.phtml" />
+                <block class="OAG\Blog\Block\Post\ListItem\Toolbar" name="oagblog_post_list_toolbar" template="post/list/toolbar.phtml">
+                    <block class="OAG\Blog\Block\Post\ListItem\Toolbar\Pager" name="oagblog_post_list_toolbar_pager" />
+                    <!-- used to centralize block names in same place and can get name in php class -->
+                    <action method="setPostToolbarPagerBlockName">
+                        <argument name="name" xsi:type="string">oagblog_post_list_toolbar_pager</argument>
+                    </action>
+                </block>
+                <!-- used to centralize block names in same place and can get name in php class -->
+                <action method="setToolbarBlockName">
+                    <argument name="name" xsi:type="string">oagblog_post_list_toolbar</argument>
+                </action>
+                <action method="setPostListItemBlockName">
+                    <argument name="name" xsi:type="string">oagblog_post_list_item</argument>
+                </action>
             </block>
         </referenceContainer>
     </body>

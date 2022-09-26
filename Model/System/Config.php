@@ -41,6 +41,11 @@ class Config
     const XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK = 'oag_blog/index_page/summary_cms_block';
 
     /**
+     * Hold index page blog summary CMS block id config path
+     */
+    const XML_PATH_INDEX_PAGE_POST_PER_PAGE = 'oag_blog/index_page/posts_per_page';
+
+    /**
      * Hold topmenu show item config path
      */
     const XML_PATH_TOPMENU_SHOW_ITEM = 'oag_blog/topmenu/show_item';
@@ -117,6 +122,20 @@ class Config
     {
         return $this->getConfig(
             self::XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK,
+            $storeId
+        );
+    }
+
+    /**
+     * Get index page blog post per page config value
+     *
+     * @param mixed $storeId
+     * @return int
+     */
+    public function getPostPerPage($storeId = null): int
+    {
+        return (int) $this->getConfig(
+            self::XML_PATH_INDEX_PAGE_POST_PER_PAGE,
             $storeId
         );
     }
