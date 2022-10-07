@@ -72,6 +72,14 @@ class Save extends Action
             $postData->setStoreId($storeId);
             if (empty($data['entity_id'])) {
                 $data['entity_id'] = null;
+                /**
+                 * This line is necessary to load all attributes and can call differents events
+                 * like beforeSave, afterSave, etc.
+                 *
+                 * See Magento\Eav\Model\Entity\AbstractEntity::walkAttributes(), in getAttributesByScope()
+                 * foreach, here we need the attributes loaded. If not, we won't call the events exposed before
+                 */
+                $postData->getResource()->loadAllAttributes();
                 $postData->setAttributeSetId($postData->getDefaultAttributeSetId());
             } else {
                 $postData->load($data['entity_id']);

@@ -58,16 +58,46 @@ class Image extends AbstractBackend
             $newImgRelativePath = $this->imageUploader->moveFileFromTmp($imageName, true);
             $value[0]['url'] = '/' . $baseMediaDir . '/' . $newImgRelativePath;
             $value[0]['name'] = $value[0]['url'];
+        } elseif ($this->fileResidesOutsidePostDir($value)) {
+            // use relative path for image attribute so we know it's outside of post dir when we fetch it
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $value[0]['url'] = parse_url($value[0]['url'], PHP_URL_PATH);
+            $value[0]['name'] = $value[0]['url'];
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
-            $imageName = $this->checkUniqueImageName($imageName);
+            if (!$this->fileResidesOutsidePostDir($value)) {
+                $imageName = $this->checkUniqueImageName($imageName);
+            }
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
             $object->setData($attributeName, null);
         }
 
         return parent::beforeSave($object);
+    }
+
+    /**
+     * Check for file path resides outside of post media dir.
+     * The URL will be a path including pub/media if true
+     *
+     * @param array|null $value
+     * @return bool
+     */
+    private function fileResidesOutsidePostDir($value)
+    {
+        if (!is_array($value) || !isset($value[0]['url'])) {
+            return false;
+        }
+
+        $fileUrl = ltrim($value[0]['url'], '/');
+        $baseMediaDir = $this->filesystem->getUri(DirectoryList::MEDIA);
+
+        if (!$baseMediaDir) {
+            return false;
+        }
+
+        return strpos($fileUrl, $baseMediaDir) !== false;
     }
 
     /**
@@ -91,7 +121,7 @@ class Image extends AbstractBackend
      */
     private function getUploadedImageName($value): string
     {
-        if (is_array($value) && !empty($value[0]['name'])) {
+        if (is_array($value) && isset($value[0]['name'])) {
             return $value[0]['name'];
         }
 
