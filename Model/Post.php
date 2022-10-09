@@ -131,9 +131,13 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         return $this->getResource()->getEntityType()->getDefaultAttributeSetId();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getUrl()
     {
-        return $this->url->getPostUrl($this);
+        $storeId = is_numeric($this->getStoreId()) ? $this->getStoreId() : null;
+        return $this->url->getPostUrl($this, $storeId);
     }
 
     /**
@@ -266,5 +270,21 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     public function getPublishedAt($dateFormat = null)
     {
         return $this->_getData(self::KEY_PUBLISHED_AT);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPreviewHash()
+    {
+        return $this->_getData(self::KEY_PREVIEW_HASH);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStatus()
+    {
+        return $this->_getData(self::KEY_STATUS);
     }
 }

@@ -9,7 +9,9 @@ use Magento\Eav\Model\Entity\Context;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Setup\PostSetup;
+use Magento\Framework\Math\Random;
 
 class Post extends AbstractEntity
 {
@@ -31,6 +33,11 @@ class Post extends AbstractEntity
     protected $entityManager;
 
     /**
+     * @var Random
+     */
+    protected $random;
+
+    /**
      * @param Context               $context
      * @param StoreManagerInterface $storeManager
      * @param array                 $data
@@ -38,16 +45,18 @@ class Post extends AbstractEntity
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
+        Random $random,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->setType(PostSetup::ENTITY_TYPE_CODE);
         $this->setConnection(PostSetup::ENTITY_TYPE_CODE . '_read', PostSetup::ENTITY_TYPE_CODE . '_write');
         $this->_storeManager = $storeManager;
+        $this->random = $random;
     }
 
     /**
-     * Set attribute set id and entity type id value
+     * Set attribute set id and preview hash
      *
      * @param \Magento\Framework\DataObject $customer
      * @return $this
@@ -58,6 +67,9 @@ class Post extends AbstractEntity
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
         $object->setAttributeSetId($object->getAttributeSetId() ?: $this->getEntityType()->getDefaultAttributeSetId());
+        if (empty($object->getPreviewHash())) {
+            $object->setData(PostInterface::KEY_PREVIEW_HASH, $this->random->getRandomString(32));
+        }
         return parent::_beforeSave($object);
     }
 

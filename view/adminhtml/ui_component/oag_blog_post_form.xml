@@ -14,6 +14,7 @@
             <item name="delete" xsi:type="string">OAG\Blog\Block\Adminhtml\Post\Edit\DeleteButton</item>
             <item name="save" xsi:type="string">OAG\Blog\Block\Adminhtml\Post\Edit\SaveButton</item>
             <item name="save_and_continue" xsi:type="string">OAG\Blog\Block\Adminhtml\Post\Edit\SaveAndContinueButton</item>
+            <item name="preview" xsi:type="string">OAG\Blog\Block\Adminhtml\Post\Edit\Preview</item>
         </item>
     </argument>
     <dataSource name="oag_blog_post_form_data_source">

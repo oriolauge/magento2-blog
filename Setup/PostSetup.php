@@ -25,6 +25,26 @@ class PostSetup extends EavSetup
     const EAV_ENTITY_TYPE_CODE = 'oag_blog';
 
     /**
+     * Holds general group tag
+     */
+    const GENERAL_GROUP = 'General';
+
+    /**
+     * Holds content group tag
+     */
+    const CONTENT_GROUP = 'Content';
+
+    /**
+     * Holds Search Engine Optimization group tag
+     */
+    const SEO_GROUP = 'Search Engine Optimization';
+
+    /**
+     * Holds Open Graph Metadata group tag
+     */
+    const OG_METADATA_GROUP = 'Open Graph Metadata';
+
+    /**
      * Retrieve Entity Attributes
      *
      * @return array
@@ -36,7 +56,7 @@ class PostSetup extends EavSetup
 
         //General information
         $attributes[PostInterface::KEY_TITLE] = [
-            'group' => 'General',
+            'group' => self::GENERAL_GROUP,
             'type' => 'varchar',
             'label' => 'Title',
             'input' => 'text',
@@ -52,7 +72,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_STATUS] = [
-            'group' => 'General',
+            'group' => self::GENERAL_GROUP,
             'type' => 'int',
             'label' => 'Status',
             'input' => 'boolean',
@@ -69,7 +89,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_PUBLISHED_AT] = [
-            'group' => 'General',
+            'group' => self::GENERAL_GROUP,
             'type' => 'datetime',
             'label' => 'Published At',
             'input' => 'datetime',
@@ -85,10 +105,25 @@ class PostSetup extends EavSetup
             'wysiwyg_enabled' => '0',
         ];
 
+        $attributes[PostInterface::KEY_PREVIEW_HASH] = [
+            'group' => self::GENERAL_GROUP,
+            'type' => 'varchar',
+            'label' => 'Preview hash',
+            'input' => 'text',
+            'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
+            'required' => '0',
+            'user_defined' => false,
+            'default' => '',
+            'unique' => false,
+            'sort_order' => '40',
+            'note' => '',
+            'visible' => '0',
+            'wysiwyg_enabled' => '0',
+        ];
 
         //Content
         $attributes[PostInterface::KEY_SHORT_CONTENT] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'text',
             'label' => 'Short Content',
             'input' => 'textarea',
@@ -104,7 +139,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_CONTENT] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'text',
             'label' => 'Content',
             'input' => 'textarea',
@@ -120,7 +155,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_IMAGE] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'varchar',
             'label' => 'Image',
             'input' => 'image',
@@ -137,7 +172,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_IMAGE_ALT] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'varchar',
             'label' => 'Image Alt',
             'input' => 'text',
@@ -153,7 +188,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_LIST_IMAGE] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'varchar',
             'label' => 'List Image',
             'input' => 'image',
@@ -170,7 +205,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_LIST_IMAGE_ALT] = [
-            'group' => 'Content',
+            'group' => self::CONTENT_GROUP,
             'type' => 'varchar',
             'label' => 'List Image Alt',
             'input' => 'text',
@@ -187,7 +222,7 @@ class PostSetup extends EavSetup
 
         //Search Engine Optimization attributes
         $attributes[PostInterface::KEY_URL_KEY] = [
-            'group' => 'Search Engine Optimization',
+            'group' => self::SEO_GROUP,
             'type' => 'varchar',
             'label' => 'URL Key',
             'input' => 'text',
@@ -203,7 +238,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_META_TITLE] = [
-            'group' => 'Search Engine Optimization',
+            'group' => self::SEO_GROUP,
             'type' => 'varchar',
             'label' => 'Meta Title',
             'input' => 'text',
@@ -219,7 +254,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_META_DESCRIPTION] = [
-            'group' => 'Search Engine Optimization',
+            'group' => self::SEO_GROUP,
             'type' => 'text',
             'label' => 'Meta Description',
             'input' => 'textarea',
@@ -235,7 +270,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_META_KEYWORDS] = [
-            'group' => 'Search Engine Optimization',
+            'group' => self::SEO_GROUP,
             'type' => 'text',
             'label' => 'Meta Keywords',
             'input' => 'textarea',
@@ -251,7 +286,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_OPEN_GRAPH_TITLE] = [
-            'group' => 'Open Graph Metadata',
+            'group' => self::OG_METADATA_GROUP,
             'type' => 'text',
             'label' => 'Open Graph Title',
             'input' => 'text',
@@ -267,7 +302,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_OPEN_GRAPH_DESCRIPTION] = [
-            'group' => 'Open Graph Metadata',
+            'group' => self::OG_METADATA_GROUP,
             'type' => 'text',
             'label' => 'Open Graph Description',
             'input' => 'textarea',
@@ -283,7 +318,7 @@ class PostSetup extends EavSetup
         ];
 
         $attributes[PostInterface::KEY_OPEN_GRAPH_IMAGE] = [
-            'group' => 'Open Graph Metadata',
+            'group' => self::OG_METADATA_GROUP,
             'type' => 'text',
             'label' => 'Open Graph Image',
             'input' => 'image',

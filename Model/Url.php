@@ -47,14 +47,18 @@ class Url
     /**
      * Get post url
      *
-     * @param Post $post
-     * @return void
+     * @param PostInterface $post
+     * @param mixed $storeId
+     * @return string
      */
-    public function getPostUrl(PostInterface $post): string
+    public function getPostUrl(PostInterface $post, $storeId = null): string
     {
-        return $this->url->getUrl('', [ '_direct' => 
-            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post)
-        ]);
+        if (is_numeric($storeId)) {
+            $this->url->setScope($storeId);
+        }
+        return $this->url->getDirectUrl(
+            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post, $storeId)
+        );
     }
 
     /**

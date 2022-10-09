@@ -23,8 +23,11 @@ class Save extends Action
     protected $storeManager;
 
     /**
-     * @param  Context           $context
-     * @param  PostFactory       $postFactory
+     * Initialize dependencies.
+     *
+     * @param Context $context
+     * @param PostFactory $postFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,

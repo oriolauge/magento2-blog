@@ -26,7 +26,7 @@ interface PostInterface extends ExtensibleDataInterface
     const KEY_OPEN_GRAPH_TITLE = 'open_graph_title';
     const KEY_OPEN_GRAPH_DESCRIPTION = 'open_graph_description';
     const KEY_OPEN_GRAPH_IMAGE = 'open_graph_image';
-
+    const KEY_PREVIEW_HASH = 'preview_hash';
 
     /**
      * @return int
@@ -156,4 +156,18 @@ interface PostInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getPublishedAt($dateFormat = null);
+
+    /**
+     * Get preview hash. Used to preview a post even if is not enabled
+     *
+     * @return string
+     */
+    public function getPreviewHash();
+
+    /**
+     * Get post status
+     *
+     * @return string
+     */
+    public function getStatus();
 }

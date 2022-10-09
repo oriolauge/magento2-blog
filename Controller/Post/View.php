@@ -5,6 +5,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\UrlInterface;
@@ -83,13 +84,18 @@ class View implements HttpGetActionInterface
     public function execute()
     {
         $postId = (int) $this->request->getParam('id');
+        $preview = $this->request->getParam(PostInterface::KEY_PREVIEW_HASH);
+
         try {
             $post = $this->postRepository->getById($postId);
         } catch (NoSuchEntityException $e) {
             //if post not exists... return 404
-            $resultForward = $this->forwardFactory->create();
-            $resultForward->forward('noroute');
-            return $resultForward;
+            return $this->return404();
+        }
+
+        //If post is disabled and we don't get the preview hash
+        if (!$post->getStatus() && $preview !== $post->getPreviewHash()) {
+            return $this->return404();
         }
 
         $resultPage = $this->resultPageFactory->create();
@@ -98,7 +104,18 @@ class View implements HttpGetActionInterface
         $block = $resultPage->getLayout()->getBlock('oagblog_post_view_content');
         $block->setData('custom_parameter', $post->getContent());
         return $resultPage;
+    }
 
+    /**
+     * Return 404 page
+     *
+     * @return Forward
+     */
+    protected function return404(): Forward
+    {
+        $resultForward = $this->forwardFactory->create();
+        $resultForward->forward('noroute');
+        return $resultForward;
     }
 
     /**
