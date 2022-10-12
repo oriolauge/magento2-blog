@@ -5,6 +5,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
 use OAG\Blog\Api\PostRepositoryInterface;
 use OAG\Blog\Model\System\Config;
 use OAG\Blog\Model\Url as BlogUrl;
@@ -45,6 +46,11 @@ class Index implements HttpGetActionInterface
     protected $url;
 
     /**
+     * @var ForwardFactory
+     */
+    protected $forwardFactory;
+
+    /**
      * constructor function
      *
      * @param RequestInterface $request
@@ -60,7 +66,8 @@ class Index implements HttpGetActionInterface
         PostRepositoryInterface $postRepository,
         Config $config,
         BlogUrl $blogUrl,
-        UrlInterface $url
+        UrlInterface $url,
+        ForwardFactory $forwardFactory
     )
     {
         $this->request = $request;
@@ -69,6 +76,7 @@ class Index implements HttpGetActionInterface
         $this->config = $config;
         $this->blogUrl = $blogUrl;
         $this->url = $url;
+        $this->forwardFactory = $forwardFactory;
     }
     /**
      * View blog homepage action
@@ -77,6 +85,13 @@ class Index implements HttpGetActionInterface
      */
     public function execute()
     {
+        //Is extension is not enabled, we will return 404
+        if (!$this->config->isExtensionEnabled()) {
+            $resultForward = $this->forwardFactory->create();
+            $resultForward->forward('noroute');
+            return $resultForward;
+        }
+
         $resultPage = $this->resultPageFactory->create();
         $this->prepareHeaderValues($resultPage);
         $this->prepareBreadcrumb($resultPage);

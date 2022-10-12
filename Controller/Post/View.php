@@ -83,6 +83,10 @@ class View implements HttpGetActionInterface
      */
     public function execute()
     {
+        if (!$this->config->isExtensionEnabled()) {
+            return $this->return404();
+        }
+
         $postId = (int) $this->request->getParam('id');
         $preview = $this->request->getParam(PostInterface::KEY_PREVIEW_HASH);
 

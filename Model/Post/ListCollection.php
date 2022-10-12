@@ -2,6 +2,8 @@
 
 namespace OAG\Blog\Model\Post;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Api\SortOrder;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use OAG\Blog\Model\ResourceModel\Post\CollectionFactory;
@@ -26,6 +28,11 @@ class ListCollection
     protected $collectionProcessor;
 
     /**
+     * @var SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
+
+    /**
      * Construct function
      *
      * @param CollectionFactory $collectionFactory
@@ -35,11 +42,13 @@ class ListCollection
     public function __construct(
         CollectionFactory $collectionFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        SortOrderBuilder $sortOrderBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionProcessor = $collectionProcessor;
+        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**
@@ -65,6 +74,10 @@ class ListCollection
         $searchCriteriaBuilder = $this->searchCriteriaBuilder
             ->addFilter(PostInterface::KEY_STATUS, Boolean::VALUE_YES)
             ->create();
+
+        $searchCriteriaBuilder->setSortOrders([
+            $this->sortOrderBuilder->setField(PostInterface::KEY_PUBLISHED_AT)->setDirection(SortOrder::SORT_DESC)->create()
+        ]);
 
         if (is_numeric($pageSize) && is_numeric($page)) {
             $searchCriteriaBuilder->setPageSize($pageSize)->setCurrentPage($page);
