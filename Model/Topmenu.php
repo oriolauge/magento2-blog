@@ -44,7 +44,7 @@ class Topmenu
      */
     public function getBlogNode(Node $menu, RequestInterface $request, Tree $tree = null): ?Node
     {
-        if (!$this->config->canTopmenuShowItem()) {
+        if (!$this->config->canTopmenuShowItem() || !$this->config->isExtensionEnabled()) {
             return null;
         }
 
@@ -56,7 +56,7 @@ class Topmenu
             'name'      => $this->config->getBlogTopmenuItemText(),
             'id'        => 'oag-blog-topmenu-main-item',
             'url'       => $this->url->getBlogIndexUrl(),
-            'is_active' => ($request->getModuleName() == 'oagblog')
+            'is_active' => ($request->getModuleName() === 'oagblog')
         ];
 
         return new Node($data, 'id', $tree, $menu);
