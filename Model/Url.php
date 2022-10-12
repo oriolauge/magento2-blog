@@ -62,6 +62,20 @@ class Url
     }
 
     /**
+     * Return relative post url.
+     * 
+     * Currently we don't add the language code.
+     *
+     * @param PostInterface $post
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getPostRelativeUrl(PostInterface $post, $storeId = null): string
+    {
+        return $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post, $storeId);
+    }
+
+    /**
      * Get main blog page
      *
      * @param mixed $storeId

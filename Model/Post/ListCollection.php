@@ -45,9 +45,11 @@ class ListCollection
     /**
      * Get post list collection
      *
+     * @param integer|null $pageSize
+     * @param integer $page
      * @return Collection
      */
-    public function getPostListCollection(int $pageSize, int $page = 1): Collection
+    public function getPostListCollection(int $pageSize = null, int $page = 1): Collection
     {
         $collection = $this->collectionFactory->create();
         $collection->addAttributeToSelect([
@@ -60,12 +62,17 @@ class ListCollection
             PostInterface::KEY_STATUS
         ]);
 
-        $this->collectionProcessor->process($this->searchCriteriaBuilder
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder
             ->addFilter(PostInterface::KEY_STATUS, Boolean::VALUE_YES)
-            ->setPageSize($pageSize)
-            ->setCurrentPage($page)
-            ->create()
-            , $collection
+            ->create();
+
+        if (is_numeric($pageSize) && is_numeric($page)) {
+            $searchCriteriaBuilder->setPageSize($pageSize)->setCurrentPage($page);
+        }
+
+        $this->collectionProcessor->process(
+            $searchCriteriaBuilder,
+            $collection
         );
 
         return $collection;

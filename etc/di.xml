@@ -89,6 +89,20 @@
         </arguments>
     </type>
 
+    <!-- Necessary to add our urls in sitemap.xml -->
+    <type name="Magento\Sitemap\Model\ItemProvider\Composite">
+        <arguments>
+            <argument name="itemProviders" xsi:type="array">
+                <item name="OagBlogPagesProvider" xsi:type="object">
+                    OAG\Blog\Model\Sitemap\ItemProvider\Blog
+                </item>
+                <item name="OagBlogPostProvider" xsi:type="object">
+                    OAG\Blog\Model\Sitemap\ItemProvider\Post
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Eav\Model\Entity\AttributeCache">
         <arguments>
             <argument name="unsupportedTypes" xsi:type="array">

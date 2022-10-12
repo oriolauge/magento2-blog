@@ -4,6 +4,9 @@
     <module name="OAG_Blog" setup_version="0.0.1">
         <sequence>
             <module name="Mage_Eav" />
+            <module name="Magento_Sitemap" />
+            <module name="Magento_Catalog" />
+            <module name="Magento_Store" />
         </sequence>
     </module>
 </config>

@@ -11,6 +11,11 @@ use Magento\Store\Model\ScopeInterface;
 class Config
 {
     /**
+     * Hold general enabled config path
+     */
+    const XML_PATH_GENERAL_ENABLED = 'oag_blog/general/enabled';
+
+    /**
      * Hold index page blog title config path
      */
     const XML_PATH_INDEX_PAGE_TITLE = 'oag_blog/index_page/title';
@@ -56,6 +61,36 @@ class Config
     const XML_PATH_TOPMENU_ITEM_TEXT = 'oag_blog/topmenu/item_text';
 
     /**
+     * Hold Sitemap post enabled
+     */
+    const XML_PATH_SITEMAP_POST_ENABLED = 'oag_blog/sitemap/post/enabled';
+
+    /**
+     * Hold Sitemap post changefreq
+     */
+    const XML_PATH_SITEMAP_POST_CHANGEFREQ = 'oag_blog/sitemap/post/changefreq';
+
+    /**
+     * Hold Sitemap post priority
+     */
+    const XML_PATH_SITEMAP_POST_PRIORITY = 'oag_blog/sitemap/post/priority';
+
+    /**
+     * Hold Sitemap index page enabled
+     */
+    const XML_PATH_SITEMAP_INDEX_PAGE_ENABLED = 'oag_blog/sitemap/index_page/enabled';
+
+    /**
+     * Hold Sitemap index page changefreq
+     */
+    const XML_PATH_SITEMAP_INDEX_PAGE_CHANGEFREQ = 'oag_blog/sitemap/index_page/changefreq';
+
+    /**
+     * Hold Sitemap index page priority
+     */
+    const XML_PATH_SITEMAP_INDEX_PAGE_PRIORITY = 'oag_blog/sitemap/index_page/priority';
+
+    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -68,6 +103,21 @@ class Config
         ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Check if extension is enabled
+     *
+     * @param mixed $storeId
+     * @return boolean
+     */
+    public function isExtensionEnabled($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_GENERAL_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
@@ -116,9 +166,9 @@ class Config
      * Get index page blog meta description config value
      *
      * @param mixed $storeId
-     * @return void
+     * @return string|null
      */
-    public function getSummaryCmsBlock($storeId = null)
+    public function getSummaryCmsBlock($storeId = null): ?string
     {
         return $this->getConfig(
             self::XML_PATH_INDEX_PAGE_SUMMARY_CMS_BLOCK,
@@ -194,6 +244,92 @@ class Config
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_TOPMENU_SHOW_ITEM,
             ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Check if post sitemap is enabled
+     *
+     * @param mixed $storeId
+     * @return boolean
+     */
+    public function isSitemapPostEnabled($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SITEMAP_POST_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get sitemap post change frequency
+     *
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getSitemapPostChangeFreq($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_SITEMAP_POST_CHANGEFREQ,
+            $storeId
+        );
+    }
+
+    /**
+     * Get sitemap post change priority
+     *
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getSitemapPostPriority($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_SITEMAP_POST_PRIORITY,
+            $storeId
+        );
+    }
+
+    /**
+     * Check if index page sitemap is enabled
+     *
+     * @param mixed $storeId
+     * @return boolean
+     */
+    public function isSitemapIndexPageEnabled($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SITEMAP_INDEX_PAGE_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get sitemap index page change frequency
+     *
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getSitemapIndexPageChangeFreq($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_SITEMAP_INDEX_PAGE_CHANGEFREQ,
+            $storeId
+        );
+    }
+
+    /**
+     * Get sitemap index page change priority
+     *
+     * @param mixed $storeId
+     * @return string
+     */
+    public function getSitemapIndexPagePriority($storeId = null)
+    {
+        return $this->getConfig(
+            self::XML_PATH_SITEMAP_INDEX_PAGE_PRIORITY,
             $storeId
         );
     }

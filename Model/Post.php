@@ -151,6 +151,15 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getRelativeUrl()
+    {
+        $storeId = is_numeric($this->getStoreId()) ? $this->getStoreId() : null;
+        return $this->url->getPostRelativeUrl($this, $storeId);
+    }
+
+    /**
      * Get Title
      *
      * @return string

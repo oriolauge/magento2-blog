@@ -92,6 +92,13 @@ interface PostInterface extends ExtensibleDataInterface
     public function getUrlKey();
 
     /**
+     * Return relative url without store code
+     *
+     * @return string
+     */
+    public function getRelativeUrl();
+
+    /**
      * Get store Id
      *
      * @return int
