@@ -70,8 +70,8 @@ class Index extends Template
 
         if (!$this->getData(self::KEY_SUMMARY_CMS_BLOCK_HTML)) {
             $html = $this->getLayout()->createBlock(
-                \Magento\Cms\Block\Block::class
-            )->setBlockId(
+                \Magento\Cms\Block\BlockByIdentifier::class
+            )->setIdentifier(
                 $blockId
             )->toHtml();
             $this->setData(self::KEY_SUMMARY_CMS_BLOCK_HTML, $html);
