@@ -3,7 +3,7 @@
 namespace OAG\Blog\Model;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\BlogUrlRewrite\Model\PostUrlPathGenerator;
-use OAG\BlogUrlRewrite\Model\Config as UrlRewriteConfig;
+use OAG\BlogUrlRewrite\Model\MainBlogUrlPathGenerator as MainBlogUrlPathGenerator;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -22,26 +22,26 @@ class Url
     protected $postUrlPathGenerator;
 
     /**
-     * @var UrlRewriteConfig
+     * @var MainBlogUrlPathGenerator
      */
-    protected $urlRewriteConfig;
+    protected $mainBlogUrlPathGenerator;
 
     /**
      * Constructor function
      *
      * @param UrlInterface $url
      * @param PostUrlPathGenerator $postUrlPathGenerator
-     * @param UrlRewriteConfig $urlRewriteConfig
+     * @param MainBlogUrlPathGenerator $mainBlogUrlPathGenerator
      */
     public function __construct(
         UrlInterface $url,
         PostUrlPathGenerator $postUrlPathGenerator,
-        UrlRewriteConfig $urlRewriteConfig
+        MainBlogUrlPathGenerator $mainBlogUrlPathGenerator
     )
     {
         $this->url = $url;
         $this->postUrlPathGenerator = $postUrlPathGenerator;
-        $this->urlRewriteConfig = $urlRewriteConfig;
+        $this->mainBlogUrlPathGenerator = $mainBlogUrlPathGenerator;
     }
 
     /**
@@ -83,8 +83,11 @@ class Url
      */
     public function getBlogIndexUrl($storeId = null): string
     {
-        return $this->url->getUrl(
-            $this->urlRewriteConfig->getBlogRoute($storeId)
+        if (is_numeric($storeId)) {
+            $this->url->setScope($storeId);
+        }
+        return $this->url->getDirectUrl(
+            $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix($storeId)
         );
     }
 
@@ -96,6 +99,6 @@ class Url
      */
     public function getBlogIndexRelativeUrl($storeId = null): string
     {
-        return $this->urlRewriteConfig->getBlogRoute($storeId) . '/';
+        return $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix($storeId);
     }
 }

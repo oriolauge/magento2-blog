@@ -55,8 +55,7 @@ class Topmenu
         $data = [
             'name'      => $this->config->getBlogTopmenuItemText(),
             'id'        => 'oag-blog-topmenu-main-item',
-            'url'       => $this->url->getBlogIndexUrl(),
-            'is_active' => ($request->getModuleName() === 'oagblog')
+            'url'       => $this->url->getBlogIndexUrl()
         ];
 
         return new Node($data, 'id', $tree, $menu);

@@ -5,7 +5,7 @@
 namespace OAG\Blog\Model;
 use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Api\UrlFinderInterface;
-use OAG\BlogUrlRewrite\Model\Config;
+use OAG\BlogUrlRewrite\Model\MainBlogUrlPathGenerator;
 use OAG\Blog\Model\ResourceModel\Post\Collection as PostCollection;
 
 class UrlFinder implements UrlFinderInterface
@@ -16,9 +16,9 @@ class UrlFinder implements UrlFinderInterface
     protected $postCollection;
 
     /**
-     * @var Config
+     * @var MainBlogUrlPathGenerator
      */
-    protected $config;
+    protected $mainBlogUrlPathGenerator;
 
     /**
      * @var StoreManagerInterface
@@ -28,15 +28,15 @@ class UrlFinder implements UrlFinderInterface
     /**
      * UrlFinder constructor
      *
-     * @param Config $config
+     * @param MainBlogUrlPathGenerator $mainBlogUrlPathGenerator
      */
     public function __construct(
-        Config $config,
+        MainBlogUrlPathGenerator $mainBlogUrlPathGenerator,
         PostCollection $postCollection,
         StoreManagerInterface $storeManager
     )
     {
-        $this->config = $config;
+        $this->mainBlogUrlPathGenerator = $mainBlogUrlPathGenerator;
         $this->postCollection = $postCollection;
         $this->storeManager = $storeManager;
     }
@@ -77,10 +77,7 @@ class UrlFinder implements UrlFinderInterface
      */
     public function isBlogUrl(string $url): bool
     {
-        $blogRoute = $this->config->getBlogRoute();
-        if (empty($blogRoute)) {
-            return false;
-        }
+        $blogRoute = $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix();
 
         if (empty($blogRoute) || $url != $blogRoute) {
             return false;
