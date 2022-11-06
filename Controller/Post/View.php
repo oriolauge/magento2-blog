@@ -13,6 +13,7 @@ use OAG\Blog\Api\PostRepositoryInterface;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\System\Config;
 use OAG\Blog\Model\Url as BlogUrl;
+use OAG\Blog\Block\Post\View as PostView;
 
 /**
  * Blog home page view
@@ -106,7 +107,7 @@ class View implements HttpGetActionInterface
         $this->prepareHeaderValues($resultPage, $post);
         $this->prepareBreadcrumb($resultPage, $post);
         $block = $resultPage->getLayout()->getBlock('oagblog_post_view_content');
-        $block->setData('custom_parameter', $post->getContent());
+        $block->setData(PostView::POST_FIELD, $post);
         return $resultPage;
     }
 

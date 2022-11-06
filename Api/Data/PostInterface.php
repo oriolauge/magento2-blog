@@ -150,6 +150,13 @@ interface PostInterface extends ExtensibleDataInterface
     public function getListImageAlt();
 
     /**
+     * Get Post image alt
+     *
+     * @return string|null
+     */
+    public function getImageAlt();
+
+    /**
      * Get short content
      *
      * @return string|null

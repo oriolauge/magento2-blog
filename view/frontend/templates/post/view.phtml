@@ -1,1 +1,12 @@
-<div><?= $block->getCustomParameter(); ?></div>
+<div class="oag-post">
+    <?php $mainImage = $block->getMainImage(); ?>
+    <?php if ($mainImage): ?>
+        <div class="main-image"><img src="<?= $mainImage ?>" alt="<?= $escaper->escapeHtml($block->getMainImageAlt()) ?>" /></div>
+    <?php endif; ?>
+    <div class="post-info-wrapper">
+        <small><?= $escaper->escapeHtml(__('Published at:') . ' ' . $block->getPublishedAt()); ?></small>
+    </div>
+    <div class="content-wrapper">
+        <?= $block->getContent(); ?>
+    </div>
+</div>

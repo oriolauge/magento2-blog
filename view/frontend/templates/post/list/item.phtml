@@ -1,11 +1,11 @@
 <?php
     $post = $block->getPost();
-    $postUrl = $block->escapeUrl($post->getUrl());
-    $postTitle = $block->escapeHtml($post->getTitle());
+    $postUrl = $escaper->escapeUrl($post->getUrl());
+    $postTitle = $escaper->escapeHtml($post->getTitle());
 ?>
 <div class="post-item-wraper">
     <div class="image-container">
-        <a href="<?= $postUrl ?>" title="<?= $post->getListImageAlt(); ?>">
+        <a href="<?= $postUrl ?>" title="<?= $escaper->escapeHtml($post->getListImageAlt()); ?>">
             <div class="image-background" style="background-image: url(<?= $post->getListImageUrl() ?>)"></div>
         </a>
     </div>
@@ -17,7 +17,6 @@
             <?= $this->getPublishedAtHtml(); ?>
         </div>
     </div>
-
 
     <?= $post->getShortContent(); ?>
 </div>
