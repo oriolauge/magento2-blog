@@ -1,4 +1,4 @@
-<div class="oag-post">
+<article class="oag-post">
     <?php $mainImage = $block->getMainImage(); ?>
     <?php if ($mainImage): ?>
         <div class="main-image"><img src="<?= $mainImage ?>" alt="<?= $escaper->escapeHtml($block->getMainImageAlt()) ?>" /></div>
@@ -9,4 +9,18 @@
     <div class="content-wrapper">
         <?= $block->getContent(); ?>
     </div>
-</div>
+    <div class="post-nextprev"><!--
+        --><div class="post-prev">
+            <a href="#">
+                <span><?= $escaper->escapeHtml(__('Previous')); ?></span>
+                This is a blog title
+            </a>
+        </div><!--
+        --><div class="post-next">
+            <a href="#">
+                <span><?= $escaper->escapeHtml(__('Next')); ?></span>
+                This is a blog title 2
+            </a>
+        </div><!--
+    --></div>
+</article>

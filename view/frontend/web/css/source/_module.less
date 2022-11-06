@@ -41,6 +41,37 @@
         .post-info-wrapper {
             margin: 0.8rem 0 1rem;
         }
+
+        .post-nextprev {
+            padding: 1rem 0;
+            border-top: 1px solid lighten(@theme__color__primary, 70%);
+            border-bottom: 1px solid lighten(@theme__color__primary, 70%);
+            margin: 1rem 0;
+            .post-prev, .post-next {
+                width: 50%;
+                display: inline-block;
+                font-weight: bold;
+                font-size: 2rem;
+                vertical-align: middle;
+                a {
+                    color: @theme__color__primary;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                    span {
+                        display: block;
+                        text-decoration: none;
+                        font-weight: normal;
+                        font-size: 1.4rem;
+                        color: @primary__color__lighter;
+                    }
+                }
+            }
+
+            .post-next {
+                text-align: right;
+            }
+        }
     }
 }
 
