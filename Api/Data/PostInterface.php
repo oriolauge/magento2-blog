@@ -184,4 +184,18 @@ interface PostInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getStatus();
+
+    /**
+     * Get previous post
+     *
+     * @return PostInterface
+     */
+    public function getPreviousPost();
+
+    /**
+     * Get next post
+     *
+     * @return PostInterface
+     */
+    public function getNextPost();
 }

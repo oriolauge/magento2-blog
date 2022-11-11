@@ -53,8 +53,12 @@
                 font-weight: bold;
                 font-size: 2rem;
                 vertical-align: middle;
+                &:first-child:last-child {
+                    width: 100%;
+                }
                 a {
                     color: @theme__color__primary;
+                    display: block;
                     &:hover {
                         text-decoration: none;
                     }
@@ -68,8 +72,18 @@
                 }
             }
 
-            .post-next {
+            .post-prev {
                 text-align: right;
+                a {
+                    padding-left: 0.8rem;
+                }
+            }
+
+            .post-next {
+                text-align: left;
+                a {
+                    padding-right: 0.8rem;
+                }
             }
         }
     }

@@ -19,6 +19,11 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="OAG\Blog\Model\Post\GetNextAndPrevious">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
 
     <!-- Define contract between API Data and his repository -->
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">

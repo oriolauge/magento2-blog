@@ -12,6 +12,7 @@ use Magento\Widget\Model\Template\Filter;
 use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\Post\Image;
+use OAG\Blog\Model\Post\GetNextAndPrevious;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -46,6 +47,21 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     protected $image;
 
     /**
+     * @var GetNextAndPrevious
+     */
+    protected $getNextAndPrevious;
+
+    /**
+     * @var PostInterface|null
+     */
+    protected $nextPost;
+
+    /**
+     * @var PostInterface|null
+     */
+    protected $previousPost;
+
+    /**
      * Prefix of model events names
      *
      * @var string
@@ -58,13 +74,15 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         Url $url,
         StoreManagerInterface $storeManager,
         Filter $templateFilter,
-        Image $image
+        Image $image,
+        GetNextAndPrevious $getNextAndPrevious
     )
     {
         $this->url = $url;
         $this->storeManager = $storeManager;
         $this->templateFilter = $templateFilter;
         $this->image = $image;
+        $this->getNextAndPrevious = $getNextAndPrevious;
         parent::__construct($context, $registry);
     }
 
@@ -306,5 +324,29 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     public function getStatus()
     {
         return $this->_getData(self::KEY_STATUS);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPreviousPost()
+    {
+        if (!$this->previousPost) {
+            $this->previousPost = $this->getNextAndPrevious->getPreviousPost($this);
+        }
+
+        return $this->previousPost;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNextPost()
+    {
+        if (!$this->nextPost) {
+            $this->nextPost = $this->getNextAndPrevious->getNextPost($this);
+        }
+
+        return $this->nextPost;
     }
 }
