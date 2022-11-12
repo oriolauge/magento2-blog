@@ -17,9 +17,11 @@ use OAG\Blog\Model\Post\GetNextAndPrevious;
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
     /**
-     * cache tag
+     * Holds cache tag
+     * This constant value means OAG (oag) Blog (b) Post (p) and we prefere a short name
+     * like product or categories CACHE_TAGs
      */
-    const CACHE_TAG = 'oag_blog_post';
+    const CACHE_TAG = 'oag_b_p';
 
     /**
      * @var string

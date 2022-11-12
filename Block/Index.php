@@ -7,11 +7,12 @@ use OAG\Blog\Model\System\Config;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\Post\ListCollection;
 use OAG\Blog\Model\ResourceModel\Post\Collection;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Main blog page
  */
-class Index extends Template
+class Index extends Template implements IdentityInterface
 {
     const KEY_SUMMARY_CMS_BLOCK_HTML = 'summary_cms_block_html';
 
@@ -135,5 +136,19 @@ class Index extends Template
         }
 
         return parent::_beforeToHtml();
+    }
+
+    /**
+     * Return identifiers for post list content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = [];
+        foreach ($this->getPostCollection() as $item) {
+            $identities[] = $item->getIdentities();
+        }
+        return array_merge([], ...$identities);
     }
 }
