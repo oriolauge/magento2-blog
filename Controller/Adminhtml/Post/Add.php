@@ -3,10 +3,10 @@
  * file for new record UI Form
  */
 namespace OAG\Blog\Controller\Adminhtml\Post;
-
+use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
-class Add extends \Magento\Backend\App\Action
+class Add extends Action
 {
     /**
      * For allow to access or not

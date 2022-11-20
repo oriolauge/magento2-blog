@@ -8,6 +8,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\AuthorizationInterface;
 use OAG\Blog\Api\Data\PostInterface;
 
 class PostActions extends Column
@@ -25,6 +26,11 @@ class PostActions extends Column
     protected $urlBuilder;
 
     /**
+     * @var AuthorizationInterface
+     */
+    protected $authorization;
+
+    /**
      * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlInterface       $urlBuilder
@@ -35,10 +41,12 @@ class PostActions extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
+        AuthorizationInterface $authorization,
         array $components = [],
         array $data = []
     ) {
         $this->urlBuilder = $urlBuilder;
+        $this->authorization = $authorization;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -53,7 +61,7 @@ class PostActions extends Column
         if (isset($dataSource['data']['items'])) {
             $storeId = $this->context->getFilterParam('store_id');
             foreach ($dataSource['data']['items'] as &$item) {
-                if (isset($item['entity_id'])) {
+                if (isset($item['entity_id']) && $this->authorization->isAllowed('OAG_Blog::post_edit')) {
                     $item[$this->getData('name')]['edit'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::URL_PATH_EDIT,
@@ -62,6 +70,8 @@ class PostActions extends Column
                         'label' => __('Edit'),
                         'hidden' => false,
                     ];
+                }
+                if (isset($item['entity_id']) && $this->authorization->isAllowed('OAG_Blog::post_edit')) {
                     $item[$this->getData('name')]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::URL_PATH_DELETE,

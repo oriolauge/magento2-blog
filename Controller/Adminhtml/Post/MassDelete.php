@@ -42,6 +42,16 @@ class MassDelete extends Action
     }
 
     /**
+     * For allow to access or not
+     *
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('OAG_Blog::post_delete');
+    }
+
+    /**
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
