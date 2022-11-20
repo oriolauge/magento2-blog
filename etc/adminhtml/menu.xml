@@ -2,6 +2,8 @@
 <!-- set admin menu -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="OAG_Blog::post" title="OAG Blog - Post" module="OAG_Blog" sortOrder="999" parent="Magento_Backend::content" action="oag_blog/post" resource="OAG_Blog::post"/>
+        <add id="OAG_Blog::oag" title="OAG" module="OAG_Blog" sortOrder="999" resource="OAG_Blog::blog"/>
+        <add id="OAG_Blog::oag_blog" title="Blog" module="OAG_Blog" sortOrder="10" parent="OAG_Blog::oag" resource="OAG_Blog::blog"/>
+        <add id="OAG_Blog::oag_blog_post" title="Post" module="OAG_Blog" sortOrder="20" parent="OAG_Blog::oag_blog" action="oag_blog/post" resource="OAG_Blog::post"/>
     </menu>
 </config>

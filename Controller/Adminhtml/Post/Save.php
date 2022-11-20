@@ -46,7 +46,8 @@ class Save extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('OAG_Blog::post');
+        return $this->_authorization->isAllowed('OAG_Blog::post_edit')
+            || $this->_authorization->isAllowed('OAG_Blog::post_create');
     }
 
     /**

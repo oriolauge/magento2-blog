@@ -6,7 +6,21 @@ Used to limit backoffice user access to OAG Blog features
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="OAG_Blog::post" title="OAG Blog Post" sortOrder="999" />
+                <resource id="OAG_Blog::blog" title="OAG Blog" sortOrder="999">
+                    <resource id="OAG_Blog::post" title="Posts" sortOrder="10">
+                        <resource id="OAG_Blog::post_create" title="Create" sortOrder="10"/>
+                        <resource id="OAG_Blog::post_edit" title="Edit" sortOrder="20"/>
+                        <resource id="OAG_Blog::post_delete" title="Delete" sortOrder="30"/>
+                        <resource id="OAG_Blog::post_preview" title="Preview" sortOrder="40"/>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="OAG_Blog::configuration" title="OAG Blog"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

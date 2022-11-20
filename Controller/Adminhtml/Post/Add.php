@@ -9,6 +9,16 @@ use Magento\Framework\Controller\ResultFactory;
 class Add extends \Magento\Backend\App\Action
 {
     /**
+     * For allow to access or not
+     *
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('OAG_Blog::post_create');
+    }
+
+    /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()

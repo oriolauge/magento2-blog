@@ -54,14 +54,14 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     protected $getNextAndPrevious;
 
     /**
-     * @var PostInterface|null
+     * @var PostInterface|null|false
      */
-    protected $nextPost;
+    protected $nextPost = false;
 
     /**
-     * @var PostInterface|null
+     * @var PostInterface|null|false
      */
-    protected $previousPost;
+    protected $previousPost = false;
 
     /**
      * Prefix of model events names
@@ -337,7 +337,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     public function getPreviousPost()
     {
-        if (!$this->previousPost) {
+        if ($this->previousPost === false) {
             $this->previousPost = $this->getNextAndPrevious->getPreviousPost($this);
         }
 
@@ -349,7 +349,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     public function getNextPost()
     {
-        if (!$this->nextPost) {
+        if ($this->nextPost === false) {
             $this->nextPost = $this->getNextAndPrevious->getNextPost($this);
         }
 
