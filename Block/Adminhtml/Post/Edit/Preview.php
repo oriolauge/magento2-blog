@@ -30,19 +30,24 @@ class Preview implements ButtonProviderInterface
     protected $storeManager;
 
     /**
+     * @var \Magento\Framework\AuthorizationInterface
+     */
+    protected $authorization;
+
+    /**
      * Init dependencies
      *
      * @param Context $context
-     * @param RequestInterface $request
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
-        RequestInterface $request,
         StoreManagerInterface $storeManager
     ) {
         $this->urlBuilder = $context->getUrlBuilder();
-        $this->request = $request;
+        $this->request = $context->getRequest();
         $this->storeManager = $storeManager;
+        $this->authorization = $context->getAuthorization();
     }
 
     /**
@@ -52,7 +57,8 @@ class Preview implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if (($id = (int) $this->request->getParam('entity_id')) > 0) {
+        if (($id = (int) $this->request->getParam('entity_id')) > 0 &&
+            $this->authorization->isAllowed('OAG_Blog::post_preview')) {
             $storeId = (int) $this->request->getParam('store');
             if ($storeId < 1) {
                 $storeId = $this->storeManager->getDefaultStoreView()->getStoreId();

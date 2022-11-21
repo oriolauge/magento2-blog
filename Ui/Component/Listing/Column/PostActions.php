@@ -71,7 +71,7 @@ class PostActions extends Column
                         'hidden' => false,
                     ];
                 }
-                if (isset($item['entity_id']) && $this->authorization->isAllowed('OAG_Blog::post_edit')) {
+                if (isset($item['entity_id']) && $this->authorization->isAllowed('OAG_Blog::post_delete')) {
                     $item[$this->getData('name')]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(
                             self::URL_PATH_DELETE,

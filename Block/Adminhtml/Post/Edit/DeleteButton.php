@@ -6,7 +6,6 @@
 namespace OAG\Blog\Block\Adminhtml\Post\Edit;
 
 use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
@@ -22,22 +21,24 @@ class DeleteButton implements ButtonProviderInterface
     protected $urlBuilder;
 
     /**
-     * Registry
-     *
-     * @var Registry
+     * @var RequestInterface
      */
-    protected $registry;
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\AuthorizationInterface
+     */
+    protected $authorization;
 
     /**
      * @param Context  $context
-     * @param Registry $registry
      */
     public function __construct(
-        Context $context,
-        Registry $registry
+        Context $context
     ) {
         $this->urlBuilder = $context->getUrlBuilder();
-        $this->registry = $registry;
+        $this->request = $context->getRequest();
+        $this->authorization = $context->getAuthorization();
     }
 
     /**
@@ -47,7 +48,9 @@ class DeleteButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if ($this->registry->registry('entity_id') > 0) {
+        $data = [];
+        if ($this->authorization->isAllowed('OAG_Blog::post_delete') &&
+            $this->request->getParam('entity_id') > 0) {
             $data = [
                 'label' => __('Delete'),
                 'class' => 'delete',
@@ -59,8 +62,9 @@ class DeleteButton implements ButtonProviderInterface
                 'deleteConfirm(\'' . __("Are you sure you want to do this?") . '\', \'' . $this->getDeleteUrl() . '\')',
                 'sort_order' => 20,
             ];
-            return $data;
         }
+        return $data;
+
     }
 
     /**
@@ -70,6 +74,6 @@ class DeleteButton implements ButtonProviderInterface
      */
     public function getDeleteUrl()
     {
-        return $this->urlBuilder->getUrl('*/*/delete', ['entity_id' => $this->registry->registry('entity_id')]);
+        return $this->urlBuilder->getUrl('*/*/delete', ['entity_id' => (int) $this->request->getParam('entity_id')]);
     }
 }
