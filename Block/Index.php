@@ -17,6 +17,13 @@ class Index extends Template implements IdentityInterface
     const KEY_SUMMARY_CMS_BLOCK_HTML = 'summary_cms_block_html';
 
     /**
+     * Holds cache tag
+     * This constant value means OAG (oag) Blog (b) Post (p) and we prefere a short name
+     * like product or categories CACHE_TAGs
+     */
+    const KEY_OAG_BLOG_POST_INDEX_CACHE_TAG = 'oag_b_p_listing';
+
+    /**
      * @var Config
      */
     protected $config;
@@ -145,10 +152,6 @@ class Index extends Template implements IdentityInterface
      */
     public function getIdentities()
     {
-        $identities = [];
-        foreach ($this->getPostCollection() as $item) {
-            $identities[] = $item->getIdentities();
-        }
-        return array_merge([], ...$identities);
+        return [self::KEY_OAG_BLOG_POST_INDEX_CACHE_TAG];
     }
 }

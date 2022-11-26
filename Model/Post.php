@@ -13,6 +13,7 @@ use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\Post\Image;
 use OAG\Blog\Model\Post\GetNextAndPrevious;
+use OAG\Blog\Block\Index;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -102,11 +103,14 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     /**
      * Get identities
      *
+     * We added KEY_OAG_BLOG_POST_INDEX_CACHE_TAG because in every save process, we will
+     * invalidate the blog listing view and we will see new blog posts
+     *
      * @return array
      */
     public function getIdentities()
     {
-        $identities = [];
+        $identities = [Index::KEY_OAG_BLOG_POST_INDEX_CACHE_TAG];
         if ($this->getId()) {
             $identities[] = self::CACHE_TAG . '_' . $this->getId();
         }

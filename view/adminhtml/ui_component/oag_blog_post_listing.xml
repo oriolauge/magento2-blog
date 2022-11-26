@@ -48,15 +48,6 @@
             </argument>
         </bookmark>
         <columnsControls name="columns_controls"/>
-        <!-- <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">oag_blog_post_listing</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark> -->
         <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -125,18 +116,6 @@
                     </item>
                 </argument>
             </action>
-            <action name="edit">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">edit</item>
-                        <item name="label" xsi:type="string" translate="true">Edit</item>
-                        <item name="callback" xsi:type="array">
-                            <item name="provider" xsi:type="string">oag_blog_post_listing.oag_blog_post_listing.oag_blog_post_columns_editor</item>
-                            <item name="target" xsi:type="string">editSelected</item>
-                        </item>
-                    </item>
-                </argument>
-            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -151,38 +130,6 @@
         </paging>
     </container>
     <columns name="oag_blog_post_columns">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">oag_blog_post_listing.oag_blog_post_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
-                <item name="editorConfig" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">oag_blog_post_listing.oag_blog_post_listing.oag_blog_post_columns.ids</item>
-                    <item name="enabled" xsi:type="boolean">false</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                    <item name="clientConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="*/*/inlineEdit"/>
-                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                    </item>
-                </item>
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">oag_blog_post_listing.oag_blog_post_listing.oag_blog_post_columns_editor</item>
-                        <item name="target" xsi:type="string">startEdit</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                            <item name="1" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">oag_blog_post_listing.oag_blog_post_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
-                    </item>
-                </item>
-            </item>
-        </argument>
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
