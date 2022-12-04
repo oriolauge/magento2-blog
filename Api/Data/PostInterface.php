@@ -198,4 +198,30 @@ interface PostInterface extends ExtensibleDataInterface
      * @return PostInterface
      */
     public function getNextPost();
+
+    /**
+     * Get Open Graph Title
+     *
+     * If Open graph is empty, we will return post meta title
+     *
+     * @return string
+     */
+    public function getOpenGraphTitle();
+
+    /**
+     * Get Open Graph Description
+     *
+     * If Open graph is empty, we will return post meta description
+     *
+     * @return string|null
+     */
+    public function getOpenGraphDescription();
+
+    /**
+     * Get Open Graph Image Url
+     *
+     * If Open graph is empty, we will return post image
+     * @return string
+     */
+    public function getOpenGraphImageAbsoluteUrl();
 }

@@ -1,0 +1,17 @@
+<?php
+/**
+ * Blog post og:tags
+ *
+ * @var $block \OAG\Blog\Block\Post\View\Opengraph
+ */
+?>
+<?php if ($openGraphImage = $block->getOpenGraphImageUrl()): ?>
+    <meta property="og:title" content="<?= $block->escapeHtml($block->getOpenGraphTitle()); ?>" />
+    <meta property="og:url" content="<?= $block->escapeHtml($block->getPostUrl()); ?>" />
+    <meta property="og:image" content="<?= $block->escapeHtml($openGraphImage); ?>" />
+    <meta property="og:site_name" content="<?= $block->escapeHtml($block->getSiteName()); ?>" />
+    <meta property="og:type" content="article" />
+    <?php if ($openGraphDescription = $block->getOpenGraphDescription()): ?>
+        <meta property="og:description" content="<?= $block->escapeHtml($openGraphDescription); ?>" />
+    <?php endif; ?>
+<?php endif; ?>

@@ -44,5 +44,4 @@ class ListItem extends Template
         }
         return null;
     }
-
 }

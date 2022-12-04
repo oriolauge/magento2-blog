@@ -359,4 +359,33 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
 
         return $this->nextPost;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOpenGraphTitle()
+    {
+        $openGraphTitle = $this->_getData(self::KEY_OPEN_GRAPH_TITLE);
+        return $openGraphTitle ?: $this->getMetaTitle();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOpenGraphDescription()
+    {
+        $openGraphDescription = $this->_getData(self::KEY_OPEN_GRAPH_DESCRIPTION);
+        return $openGraphDescription ?: $this->getMetaDescription();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOpenGraphImageAbsoluteUrl()
+    {
+        if ($this->hasData(self::KEY_OPEN_GRAPH_IMAGE)) {
+            return $this->image->getUrl($this, self::KEY_OPEN_GRAPH_IMAGE);
+        }
+        return $this->getImageUrl();
+    }
 }

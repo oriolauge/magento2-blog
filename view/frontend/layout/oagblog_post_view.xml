@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="head.additional">
+            <block class="OAG\Blog\Block\Post\View\Opengraph" name="oagblog_post_view_opengraph" template="OAG_Blog::post/view/opengraph.phtml" before="-" />
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="OAG\Blog\Block\Post\View" name="oagblog_post_view_content" template="OAG_Blog::post/view.phtml" />
         </referenceContainer>
