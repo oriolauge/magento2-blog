@@ -18,7 +18,7 @@ php bin/magento cache:flush
 ```
 Also, you need to add the next line in .gitignore to exclude media blog files: ```/pub/media/blog/*```
 ## Uninstalation guide
-You can execute command ```php bin/magento module:uninstall OAG_Blog``` to uninstall module.
+You can execute command ```php bin/magento module:uninstall OAG_Blog OAG_BlogUrlRewrite``` to uninstall module.
 Also, remove the line ```/pub/media/blog/*``` in .gitignore if you added it.
 
 ## Key Features
@@ -28,6 +28,7 @@ Also, remove the line ```/pub/media/blog/*``` in .gitignore if you added it.
 - Database structured with EAV pattern.
 - Automatic blog/post urls added in sitemap.
 - Preview post functionality even the post is not enabled.
+- Use url rewrite module to create SEO urls and correct switch with differents storeview
 
 ## Future Features
 TODO
