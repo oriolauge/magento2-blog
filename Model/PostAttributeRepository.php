@@ -36,4 +36,15 @@ class PostAttributeRepository implements PostAttributeRepositoryInterface
             $searchCriteria
         );
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function get($attributeCode)
+    {
+        return $this->eavAttributeRepository->get(
+            PostAttributeInterface::ENTITY_TYPE_CODE,
+            $attributeCode
+        );
+    }
 }

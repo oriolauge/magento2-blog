@@ -56,6 +56,14 @@ interface PostInterface extends ExtensibleDataInterface
     public function getUrl();
 
     /**
+     * Get post url from specific store id
+     *
+     * @param int $storeId
+     * @return void
+     */
+    public function getUrlByStoreId($storeId);
+
+    /**
      * @return int
      */
     public function getAttributeSetId();
@@ -224,4 +232,11 @@ interface PostInterface extends ExtensibleDataInterface
      * @return string
      */
     public function getOpenGraphImageAbsoluteUrl();
+
+    /**
+     * Get all stores where the post is enabled
+     *
+     * @return array
+     */
+    public function getAllStatusStoreValues();
 }

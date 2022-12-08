@@ -47,17 +47,25 @@ class Url
     /**
      * Get post url
      *
+     * We add store_id param to avoid chached result if we want to get all urls from all stores
+     * This feature is used to generate hreflangs
+     *
+     * You can check Magento\Framework\Url->getUrl function and see cached logic
+     *
      * @param PostInterface $post
      * @param mixed $storeId
      * @return string
      */
     public function getPostUrl(PostInterface $post, $storeId = null): string
     {
+        $params = [];
         if (is_numeric($storeId)) {
             $this->url->setScope($storeId);
+            $params['store_id'] = $storeId;
         }
         return $this->url->getDirectUrl(
-            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post, $storeId)
+            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post, $storeId),
+            $params
         );
     }
 
@@ -78,16 +86,24 @@ class Url
     /**
      * Get main blog page
      *
+     * We add store_id param to avoid chached result if we want to get all urls from all stores
+     * This feature is used to generate hreflangs
+     *
+     * You can check Magento\Framework\Url->getUrl function and see cached logic
+     *
      * @param mixed $storeId
      * @return string
      */
     public function getBlogIndexUrl($storeId = null): string
     {
+        $params = [];
         if (is_numeric($storeId)) {
             $this->url->setScope($storeId);
+            $params['store_id'] = $storeId;
         }
         return $this->url->getDirectUrl(
-            $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix($storeId)
+            $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix($storeId),
+            $params
         );
     }
 

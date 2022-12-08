@@ -64,7 +64,26 @@
                     </depends>
                 </field>
             </group>
-            <group id="sitemap" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="hreflang" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Hreflang</label>
+                <comment><![CDATA[To configure hreflang, you need to do the next steps:<br />- Configure hreflang in all storeviews that you want to related<br />- Select one storeview like default language.<br />- Enable this feature for general config or specific website (not storeview).]]></comment>
+                <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Default</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Option to enable/disable option to add hreflang in blog/post pages.</comment>
+                </field>
+                <field id="code" type="text" translate="label" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Code</label>
+                    <validate>validate-xml-identifier</validate>
+                    <comment>Please, add the hreflang language code from this store view config (you can see all hreflang codes in https://hreflang.org/list-of-hreflang-codes/ page). If is empty, we will ignore this storeview to generate hreflang.</comment>
+                </field>
+                <field id="default" type="select" translate="label" sortOrder="30" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Default</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Please, only select one storeview for default language. If you select two ore more, we will take the first one.</comment>
+                </field>
+            </group>
+            <group id="sitemap" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Xml Sitemap</label>
                 <group id="index_page" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Blog Index Page Options</label>

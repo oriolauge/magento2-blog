@@ -11,6 +11,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Setup\PostSetup;
+use OAG\Blog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Math\Random;
 
 class Post extends AbstractEntity
@@ -266,5 +267,27 @@ class Post extends AbstractEntity
             );
         }
         return $select;
+    }
+
+    /**
+     * Return all attributes values from one post
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @param Attribute $attribute
+     * @return array
+     */
+    public function getAllStoreValues($object, Attribute $attribute)
+    {
+        $select = $this->getConnection()->select()->from(
+            $attribute->getBackend()->getTable(),
+            ['store_id', 'value']
+        )->where(
+            'entity_id = ?',
+            (int) $object->getId()
+        )->where(
+            'attribute_id = ?',
+            (int) $attribute->getAttributeId()
+        );
+        return $this->getConnection()->fetchAll($select);
     }
 }

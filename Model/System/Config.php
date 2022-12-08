@@ -4,6 +4,7 @@ namespace OAG\Blog\Model\System;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Directory\Helper\Data;
 
 /**
  * OAG Blog Config Model
@@ -89,6 +90,21 @@ class Config
      * Hold Sitemap index page priority
      */
     const XML_PATH_SITEMAP_INDEX_PAGE_PRIORITY = 'oag_blog/sitemap/index_page/priority';
+
+    /**
+     * Hold Hreflang code
+     */
+    const XML_PATH_HREFLANG_CODE = 'oag_blog/hreflang/code';
+
+    /**
+     * Hold Hreflang code
+     */
+    const XML_PATH_HREFLANG_ENABLED = 'oag_blog/hreflang/enabled';
+
+    /**
+     * Hold Hreflang default storeview
+     */
+    const XML_PATH_HREFLANG_DEFAULT = 'oag_blog/hreflang/default';
 
     /**
      * @var ScopeConfigInterface
@@ -330,6 +346,50 @@ class Config
     {
         return $this->getConfig(
             self::XML_PATH_SITEMAP_INDEX_PAGE_PRIORITY,
+            $storeId
+        );
+    }
+
+    /**
+     * Get hreflang code
+     *
+     * @param mixed $storeId
+     * @return string|null
+     */
+    public function getHreflangCode($storeId): ?string
+    {
+        return $this->getConfig(
+            self::XML_PATH_HREFLANG_CODE,
+            $storeId
+        );
+    }
+
+    /**
+     * Check if hreflang is enabled
+     *
+     * @param mixed $storeId
+     * @return boolean
+     */
+    public function isHreflangEnabled($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_HREFLANG_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Check if hreflang is default Storeview
+     *
+     * @param mixed $storeId
+     * @return boolean
+     */
+    public function isHreflangDefaultStoreView($storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_HREFLANG_DEFAULT,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }

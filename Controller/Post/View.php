@@ -15,6 +15,7 @@ use OAG\Blog\Model\System\Config;
 use OAG\Blog\Model\Url as BlogUrl;
 use OAG\Blog\Block\Post\View as PostView;
 use OAG\Blog\Block\Post\View\Opengraph as Opengraph;
+use OAG\Blog\Model\Hreflang;
 
 /**
  * Blog home page view
@@ -57,6 +58,11 @@ class View implements HttpGetActionInterface
     protected $config;
 
     /**
+     * @var Hreflang
+     */
+    protected $hreflang;
+
+    /**
      * @param RequestInterface $request
      */
     public function __construct(
@@ -66,7 +72,8 @@ class View implements HttpGetActionInterface
         ForwardFactory $forwardFactory,
         UrlInterface $url,
         BlogUrl $blogUrl,
-        Config $config
+        Config $config,
+        Hreflang $hreflang
     )
     {
         $this->request = $request;
@@ -76,6 +83,7 @@ class View implements HttpGetActionInterface
         $this->url = $url;
         $this->blogUrl = $blogUrl;
         $this->config = $config;
+        $this->hreflang = $hreflang;
     }
 
     /**
@@ -107,11 +115,47 @@ class View implements HttpGetActionInterface
         $resultPage = $this->resultPageFactory->create();
         $this->prepareHeaderValues($resultPage, $post);
         $this->prepareBreadcrumb($resultPage, $post);
+        $this->prepareHrefLang($resultPage, $post);
         $blockPostViewContent = $resultPage->getLayout()->getBlock('oagblog_post_view_content');
         $blockPostViewOpengraph = $resultPage->getLayout()->getBlock('oagblog_post_view_opengraph');
         $blockPostViewContent->setData(PostView::POST_FIELD, $post);
         $blockPostViewOpengraph->setData(Opengraph::POST_FIELD, $post);
         return $resultPage;
+    }
+
+    /**
+     * Prepare and add hreflang in post view page
+     *
+     * @param Page $resultPage
+     * @param PostInterface $post
+     * @return void
+     */
+    protected function prepareHrefLang(Page $resultPage, PostInterface $post): void
+    {
+        if (!$this->config->isHreflangEnabled()) {
+            return;
+        }
+
+        $hreflang = $this->hreflang->getPostHreflang($post);
+
+        /**
+         * We will check if we have two or more languages. If not, we won't show hreflang.
+         * x-default needs to be excluded to know the correct languages number
+         */
+        $languagesHreflangCount = count(array_filter($hreflang, function($key) {
+            return $key !== Hreflang::XDEFAULT;
+        }, ARRAY_FILTER_USE_KEY));
+
+        if ($languagesHreflangCount > 1) {
+            $pageConfig = $resultPage->getConfig();
+            foreach ($hreflang as $language => $postUrl) {
+                $pageConfig->addRemotePageAsset(
+                    $postUrl,
+                    'alternate',
+                    ['attributes' => ['hreflang' => $language]]
+                );
+            }
+        }
     }
 
     /**

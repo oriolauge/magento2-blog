@@ -15,4 +15,12 @@ interface PostAttributeRepositoryInterface
      * @return \Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * Get post attribute with the specific attribute code
+     *
+     * @param string $attributeCode
+     * @return OAG\Blog\Api\Data\PostAttributeInterface
+     */
+    public function get($attributeCode);
 }

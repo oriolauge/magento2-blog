@@ -9,6 +9,7 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use OAG\Blog\Api\PostRepositoryInterface;
 use OAG\Blog\Model\System\Config;
 use OAG\Blog\Model\Url as BlogUrl;
+use OAG\Blog\Model\Hreflang;
 
 /**
  * Blog home page view
@@ -51,7 +52,12 @@ class Index implements HttpGetActionInterface
     protected $forwardFactory;
 
     /**
-     * constructor function
+     * @var Hreflang
+     */
+    protected $hreflang;
+
+    /**
+     * Init dependencies
      *
      * @param RequestInterface $request
      * @param PageFactory $resultPageFactory
@@ -59,6 +65,8 @@ class Index implements HttpGetActionInterface
      * @param Config $config
      * @param BlogUrl $blogUrl
      * @param UrlInterface $url
+     * @param ForwardFactory $forwardFactory
+     * @param Hreflang $hreflang
      */
     public function __construct(
         RequestInterface $request,
@@ -67,7 +75,8 @@ class Index implements HttpGetActionInterface
         Config $config,
         BlogUrl $blogUrl,
         UrlInterface $url,
-        ForwardFactory $forwardFactory
+        ForwardFactory $forwardFactory,
+        Hreflang $hreflang
     )
     {
         $this->request = $request;
@@ -77,6 +86,7 @@ class Index implements HttpGetActionInterface
         $this->blogUrl = $blogUrl;
         $this->url = $url;
         $this->forwardFactory = $forwardFactory;
+        $this->hreflang = $hreflang;
     }
     /**
      * View blog homepage action
@@ -95,7 +105,42 @@ class Index implements HttpGetActionInterface
         $resultPage = $this->resultPageFactory->create();
         $this->prepareHeaderValues($resultPage);
         $this->prepareBreadcrumb($resultPage);
+        $this->prepareHreflang($resultPage);
         return $resultPage;
+    }
+
+    /**
+     * Prepare and add hreflang in post view page
+     *
+     * @param Page $resultPage
+     * @return void
+     */
+    protected function prepareHreflang(Page $resultPage): void
+    {
+        if (!$this->config->isHreflangEnabled()) {
+            return;
+        }
+
+        $hreflang = $this->hreflang->getBlogIndexPageHreflang();
+
+        /**
+         * We will check if we have two or more languages. If not, we won't show hreflang.
+         * x-default needs to be excluded to know the correct languages number
+         */
+        $languagesHreflangCount = count(array_filter($hreflang, function($key) {
+            return $key !== Hreflang::XDEFAULT;
+        }, ARRAY_FILTER_USE_KEY));
+
+        if ($languagesHreflangCount > 1) {
+            $pageConfig = $resultPage->getConfig();
+            foreach ($hreflang as $language => $blogIndexPageUrl) {
+                $pageConfig->addRemotePageAsset(
+                    $blogIndexPageUrl,
+                    'alternate',
+                    ['attributes' => ['hreflang' => $language]]
+                );
+            }
+        }
     }
 
     /**

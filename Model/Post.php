@@ -14,6 +14,7 @@ use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\Post\Image;
 use OAG\Blog\Model\Post\GetNextAndPrevious;
 use OAG\Blog\Block\Index;
+use OAG\Blog\Api\PostAttributeRepositoryInterface;
 
 class Post extends AbstractModel implements IdentityInterface, PostInterface
 {
@@ -71,6 +72,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     protected $_eventPrefix = 'oag_blog_post';
 
+    /**
+     * @var PostAttributeRepositoryInterface
+     */
+    protected $postAttributeRepository;
+
     public function __construct(
         Context $context,
         Registry $registry,
@@ -78,7 +84,8 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         StoreManagerInterface $storeManager,
         Filter $templateFilter,
         Image $image,
-        GetNextAndPrevious $getNextAndPrevious
+        GetNextAndPrevious $getNextAndPrevious,
+        PostAttributeRepositoryInterface $postAttributeRepository
     )
     {
         $this->url = $url;
@@ -86,6 +93,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         $this->templateFilter = $templateFilter;
         $this->image = $image;
         $this->getNextAndPrevious = $getNextAndPrevious;
+        $this->postAttributeRepository = $postAttributeRepository;
         parent::__construct($context, $registry);
     }
 
@@ -165,6 +173,14 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     public function getUrl()
     {
         $storeId = is_numeric($this->getStoreId()) ? $this->getStoreId() : null;
+        return $this->getUrlByStoreId($storeId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUrlByStoreId($storeId)
+    {
         return $this->url->getPostUrl($this, $storeId);
     }
 
@@ -387,5 +403,14 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
             return $this->image->getUrl($this, self::KEY_OPEN_GRAPH_IMAGE);
         }
         return $this->getImageUrl();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllStatusStoreValues()
+    {
+        $statusAttribute = $this->postAttributeRepository->get(self::KEY_STATUS);
+        return $this->_getResource()->getAllStoreValues($this, $statusAttribute);
     }
 }
