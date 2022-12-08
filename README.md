@@ -21,10 +21,13 @@ Also, you need to add the next line in .gitignore to exclude media blog files: `
 You can execute command ```php bin/magento module:uninstall OAG_Blog``` to uninstall module.
 Also, remove the line ```/pub/media/blog/*``` in .gitignore if you added it.
 
-***WARNING/TODO***: We don't finish the uninstall script (missign config values)
-
 ## Key Features
-TODO
+- Hreflang in blog and post pages.
+- Opengraph attributes.
+- Configure blog content with site builder.
+- Database structured with EAV pattern.
+- Automatic blog/post urls added in sitemap.
+- Preview post functionality even the post is not enabled.
 
 ## Future Features
 TODO
