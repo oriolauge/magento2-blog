@@ -27,6 +27,7 @@ interface PostInterface extends ExtensibleDataInterface
     const KEY_OPEN_GRAPH_DESCRIPTION = 'open_graph_description';
     const KEY_OPEN_GRAPH_IMAGE = 'open_graph_image';
     const KEY_PREVIEW_HASH = 'preview_hash';
+    const KEY_UPDATED_AT = 'updated_at';
 
     /**
      * @return int

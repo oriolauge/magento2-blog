@@ -131,9 +131,9 @@ class Post extends AbstractEntity
     protected function _getDefaultAttributes()
     {
         return [
-            'attribute_set_id',
+            PostInterface::KEY_ATTR_TYPE_ID,
             'created_at',
-            'updated_at'
+            PostInterface::KEY_UPDATED_AT
         ];
     }
 

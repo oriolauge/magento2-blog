@@ -9,6 +9,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Model\Template\Filter;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use OAG\Blog\Model\Url;
 use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Model\Post\Image;
@@ -77,6 +78,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     protected $postAttributeRepository;
 
+    /**
+     * @var TimezoneInterface
+     */
+    protected $timezone;
+
     public function __construct(
         Context $context,
         Registry $registry,
@@ -85,7 +91,8 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         Filter $templateFilter,
         Image $image,
         GetNextAndPrevious $getNextAndPrevious,
-        PostAttributeRepositoryInterface $postAttributeRepository
+        PostAttributeRepositoryInterface $postAttributeRepository,
+        TimezoneInterface $timezone
     )
     {
         $this->url = $url;
@@ -94,6 +101,7 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
         $this->image = $image;
         $this->getNextAndPrevious = $getNextAndPrevious;
         $this->postAttributeRepository = $postAttributeRepository;
+        $this->timezone = $timezone;
         parent::__construct($context, $registry);
     }
 
@@ -333,7 +341,23 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
      */
     public function getPublishedAt($dateFormat = null)
     {
-        return $this->_getData(self::KEY_PUBLISHED_AT);
+        $publishedAt = $this->_getData(self::KEY_PUBLISHED_AT);
+        if ($publishedAt && $dateFormat) {
+            $publishedAt = $this->timezone->date(new \DateTime($publishedAt))->format($dateFormat);
+        }
+        return $publishedAt;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUpdatedAt($dateFormat = null)
+    {
+        $updatedAt = $this->_getData(self::KEY_UPDATED_AT);
+        if ($updatedAt && $dateFormat) {
+            $updatedAt = $this->timezone->date(new \DateTime($updatedAt))->format($dateFormat);
+        }
+        return $updatedAt;
     }
 
     /**

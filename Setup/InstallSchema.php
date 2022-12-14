@@ -9,6 +9,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use OAG\Blog\Api\Data\PostInterface;
 use OAG\Blog\Setup\EavTablesSetupFactory;
 use OAG\Blog\Setup\PostSetup;
 
@@ -54,7 +55,7 @@ class InstallSchema implements InstallSchemaInterface
             )->setComment('Entity Table');
 
         $table->addColumn(
-            'attribute_set_id',
+            PostInterface::KEY_ATTR_TYPE_ID,
             Table::TYPE_SMALLINT,
             null,
             [
@@ -64,18 +65,18 @@ class InstallSchema implements InstallSchemaInterface
             ],
             'Attribute Set ID'
         )->addIndex(
-            $setup->getIdxName($tableName, ['attribute_set_id']),
-            ['attribute_set_id']
+            $setup->getIdxName($tableName, [PostInterface::KEY_ATTR_TYPE_ID]),
+            [PostInterface::KEY_ATTR_TYPE_ID]
         )->addForeignKey(
             $setup->getFkName(
                 'oag_blog_post',
-                'attribute_set_id',
+                PostInterface::KEY_ATTR_TYPE_ID,
                 'eav_attribute_set',
-                'attribute_set_id'
+                PostInterface::KEY_ATTR_TYPE_ID
             ),
-            'attribute_set_id',
+            PostInterface::KEY_ATTR_TYPE_ID,
             $setup->getTable('eav_attribute_set'),
-            'attribute_set_id',
+            PostInterface::KEY_ATTR_TYPE_ID,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
@@ -89,7 +90,7 @@ class InstallSchema implements InstallSchemaInterface
             ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
             'Creation Time'
         )->addColumn(
-            'updated_at',
+            PostInterface::KEY_UPDATED_AT,
             Table::TYPE_TIMESTAMP,
             null,
             ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],

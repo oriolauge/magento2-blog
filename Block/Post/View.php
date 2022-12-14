@@ -2,34 +2,11 @@
 
 namespace OAG\Blog\Block\Post;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 
 class View extends Template implements IdentityInterface
 {
     const POST_FIELD = 'post';
-
-    /**
-     * @var TimezoneInterface
-     */
-    protected $timezone;
-
-    /**
-     * Construct function
-     *
-     * @param Context $context
-     * @param TimezoneInterface $timezone
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        TimezoneInterface $timezone,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->timezone = $timezone;
-    }
 
     /**
      * @inheritDoc
@@ -79,7 +56,7 @@ class View extends Template implements IdentityInterface
      */
     public function getPublishedAt(): ?string
     {
-        return $this->timezone->date(new \DateTime($this->_getData(self::POST_FIELD)->getPublishedAt()))->format('d/m/Y');
+        return $this->_getData(self::POST_FIELD)->getPublishedAt('d/m/Y');
     }
 
     /**

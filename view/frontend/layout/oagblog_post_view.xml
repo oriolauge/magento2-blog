@@ -3,6 +3,7 @@
     <body>
         <referenceBlock name="head.additional">
             <block class="OAG\Blog\Block\Post\View\Opengraph" name="oagblog_post_view_opengraph" template="OAG_Blog::post/view/opengraph.phtml" before="-" />
+            <block class="OAG\Blog\Block\Post\View\Richsnippets" name="oagblog_post_view_richsnippets" template="OAG_Blog::post/view/richsnippets.phtml" before="-" />
         </referenceBlock>
         <referenceContainer name="content">
             <block class="OAG\Blog\Block\Post\View" name="oagblog_post_view_content" template="OAG_Blog::post/view.phtml" />
