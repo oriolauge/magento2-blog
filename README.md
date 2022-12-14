@@ -30,6 +30,7 @@ Also, remove the line ```/pub/media/blog/*``` in .gitignore if you added it.
 - Preview post functionality even the post is not enabled.
 - Use url rewrite module to create SEO urls and correct switch with differents storeview
 - Configure multiples permission to add option to admin users to manage blog posts and configurations
+- Rich snippets in blog post page
 
 ## Future Features
 TODO
