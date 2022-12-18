@@ -41,51 +41,42 @@
         .post-info-wrapper {
             margin: 0.8rem 0 1rem;
         }
+    }
 
-        .post-nextprev {
-            padding: 1rem 0;
-            border-top: 1px solid lighten(@theme__color__primary, 70%);
-            border-bottom: 1px solid lighten(@theme__color__primary, 70%);
-            margin: 1rem 0;
-            .post-prev, .post-next {
-                width: 50%;
-                display: inline-block;
-                font-weight: bold;
-                font-size: 2rem;
-                vertical-align: middle;
-                &:first-child:last-child {
-                    width: 100%;
+    .post-nextprev {
+        padding: 1rem 0;
+        border-top: 1px solid lighten(@theme__color__primary, 70%);
+        border-bottom: 1px solid lighten(@theme__color__primary, 70%);
+        .post-prev, .post-next {
+            font-weight: bold;
+            font-size: 2rem;
+            a {
+                color: @theme__color__primary;
+                display: block;
+                &:hover {
+                    text-decoration: none;
                 }
-                a {
-                    color: @theme__color__primary;
+                span {
                     display: block;
-                    &:hover {
-                        text-decoration: none;
+                    text-decoration: none;
+                    font-weight: normal;
+                    font-size: 1.4rem;
+                    color: @primary__color__lighter;
+                    &::before {
+                        padding-right: 1rem;
                     }
-                    span {
-                        display: block;
-                        text-decoration: none;
-                        font-weight: normal;
-                        font-size: 1.4rem;
-                        color: @primary__color__lighter;
-                    }
-                }
-            }
-
-            .post-prev {
-                text-align: right;
-                a {
-                    padding-left: 0.8rem;
-                }
-            }
-
-            .post-next {
-                text-align: left;
-                a {
-                    padding-right: 0.8rem;
                 }
             }
         }
+
+        .post-next a span::before {
+            content: '<';
+        }
+
+        .post-prev a span::before {
+            content: '>';
+        }
+
     }
 }
 
@@ -94,7 +85,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    ul.post-list li {
+    ul.post-list li.post-item {
         width: calc((100% - 6%) / 3);
         display: inline-block;
         margin: 1rem 3%;
@@ -106,7 +97,23 @@
             margin: 1rem 0;
         }
     }
-    
+
+    .oagblog-post-view.page-layout-2columns-right .columns {
+        position: relative;
+        .sidebar.sidebar-additional {
+            position: sticky;
+            top: 0;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+    }
+
+    .post-next {
+        margin-bottom: 2rem;
+        &:first-child:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 //
@@ -114,7 +121,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    ul.post-list li {
+    ul.post-list li.post-item {
         width: calc((100% - 6%) / 2);
         display: inline-block;
         margin: 1rem 3%;
@@ -126,10 +133,46 @@
             margin-left: 0;
         }
     }
+
+    .post-nextprev {
+        margin: 1rem 0;
+        .post-prev, .post-next {
+            width: 50%;
+            display: inline-block;
+            vertical-align: middle;
+            &:first-child:last-child {
+                width: 100%;
+            }
+        }
+
+        .post-prev {
+            text-align: right;
+            a {
+                padding-left: 0.8rem;
+                span {
+                    &::before {
+                        padding-right: 0;
+                        content: none;
+                    }
+                    &::after {
+                        content: '>';
+                        padding-left: 1rem;
+                    }
+                }
+            }
+        }
+
+        .post-next {
+            text-align: left;
+            a {
+                padding-right: 0.8rem;
+            }
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
-    ul.post-list li {
+    ul.post-list li.post-item {
         width: 100%;
         display: block;
         margin: 1rem 0;

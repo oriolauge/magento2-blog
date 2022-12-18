@@ -120,9 +120,11 @@ class View implements HttpGetActionInterface
         $blockPostViewContent = $resultPage->getLayout()->getBlock('oagblog_post_view_content');
         $blockPostViewOpengraph = $resultPage->getLayout()->getBlock('oagblog_post_view_opengraph');
         $blockPostViewRichSnippets = $resultPage->getLayout()->getBlock('oagblog_post_view_richsnippets');
+        $blockPostViewNextPrev = $resultPage->getLayout()->getBlock('oagblog_post_view_nextprev');
         $blockPostViewContent->setData(PostView::POST_FIELD, $post);
         $blockPostViewOpengraph->setData(Opengraph::POST_FIELD, $post);
         $blockPostViewRichSnippets->setData(Richsnippets::POST_FIELD, $post);
+        $blockPostViewNextPrev->setData(Richsnippets::POST_FIELD, $post);
         return $resultPage;
     }
 

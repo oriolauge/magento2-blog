@@ -9,24 +9,4 @@
     <div class="content-wrapper">
         <?= $block->getContent(); ?>
     </div>
-    <?php if ($this->getPost()->getNextPost() || $this->getPost()->getPreviousPost()): ?>
-        <div class="post-nextprev"><!--
-            <?php if ($this->getPost()->getNextPost()): ?>
-                --><div class="post-next">
-                    <a href="<?= $this->getPost()->getNextPost()->getUrl(); ?>" title="<?= $this->getPost()->getNextPost()->getTitle(); ?>">
-                        <span><?= $escaper->escapeHtml(__('Next')); ?></span>
-                        <?= $this->getPost()->getNextPost()->getTitle(); ?>
-                    </a>
-                </div><!--
-            <?php endif; ?>
-            <?php if ($this->getPost()->getPreviousPost()): ?>
-                --><div class="post-prev">
-                    <a href="<?= $this->getPost()->getPreviousPost()->getUrl(); ?>" title="<?= $this->getPost()->getPreviousPost()->getTitle(); ?>" >
-                        <span><?= $escaper->escapeHtml(__('Previous')); ?></span>
-                        <?= $this->getPost()->getPreviousPost()->getTitle(); ?>
-                    </a>
-                </div><!--
-            <?php endif; ?>
-        --></div>
-    <?php endif; ?>
 </article>
