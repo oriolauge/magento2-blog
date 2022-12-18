@@ -79,8 +79,10 @@ class PostActions extends Column
                         ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ' . $item[PostInterface::KEY_TITLE]),
-                            'message' => __('Are you sure you wan\'t to delete a ' . $item[PostInterface::KEY_TITLE] . ' record?'),
+                            'title' => __('Delete "%1"', $item[PostInterface::KEY_TITLE]),
+                            'message' => __('Are you sure you want to delete the "%1" record?'
+                                , $item[PostInterface::KEY_TITLE]
+                            ),
                         ],
                         'hidden' => false,
                     ];
