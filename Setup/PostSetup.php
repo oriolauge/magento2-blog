@@ -20,9 +20,14 @@ class PostSetup extends EavSetup
     const ENTITY_TYPE_CODE = 'oag_blog_post';
 
     /**
-     * EAV Entity type for Blog EAV attributes
+     * Entity type for Post EAV attributes
      */
-    const EAV_ENTITY_TYPE_CODE = 'oag_blog';
+    const ENTITY_TABLE_CODE = self::ENTITY_TYPE_CODE . '_entity';
+
+    /**
+     * EAV Additional attribute table for blog eav entities
+     */
+    const EAV_ADDITIONAL_ATTRIBUTE_TABLE_CODE = 'oag_blog_eav_attribute';
 
     /**
      * Holds general group tag
@@ -349,9 +354,9 @@ class PostSetup extends EavSetup
             self::ENTITY_TYPE_CODE => [
                 'entity_model' => 'OAG\Blog\Model\ResourceModel\Post',
                 'attribute_model' => 'OAG\Blog\Model\ResourceModel\Eav\Attribute',
-                'table' => self::ENTITY_TYPE_CODE,
+                'table' => self::ENTITY_TABLE_CODE,
                 'increment_model' => null,
-                'additional_attribute_table' => 'oag_blog_eav_attribute',
+                'additional_attribute_table' => self::EAV_ADDITIONAL_ATTRIBUTE_TABLE_CODE,
                 'entity_attribute_collection' => 'OAG\Blog\Model\ResourceModel\Attribute\Collection',
                 'attributes' => $this->getAttributes(),
             ],

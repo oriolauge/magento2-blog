@@ -50,16 +50,16 @@ class EavTablesSetup
         $tableTypes = ['datetime', 'decimal', 'int', 'text', 'varchar'];
         foreach ($tableTypes as $type) {
             $this->setup->getConnection()->dropTable(
-                $this->setup->getTable(PostSetup::ENTITY_TYPE_CODE . '_' . $type)
+                $this->setup->getTable(PostSetup::ENTITY_TABLE_CODE . '_' . $type)
             );
         }
         //remove main table
         $this->setup->getConnection()->dropTable(
-            $this->setup->getTable(PostSetup::ENTITY_TYPE_CODE)
+            $this->setup->getTable(PostSetup::ENTITY_TABLE_CODE)
         );
         //remove eav attributes table
 		$this->setup->getConnection()->dropTable(
-            $this->setup->getTable(PostSetup::EAV_ENTITY_TYPE_CODE . '_eav_attribute')
+            $this->setup->getTable(PostSetup::EAV_ADDITIONAL_ATTRIBUTE_TABLE_CODE)
         );
     }
 
@@ -68,7 +68,7 @@ class EavTablesSetup
      */
     protected function createEAVMainTable()
     {
-        $tableName = PostSetup::EAV_ENTITY_TYPE_CODE . '_eav_attribute';
+        $tableName = PostSetup::EAV_ADDITIONAL_ATTRIBUTE_TABLE_CODE;
 
         $table = $this->setup->getConnection()->newTable(
             $this->setup->getTable($tableName)

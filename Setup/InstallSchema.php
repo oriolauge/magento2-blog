@@ -40,7 +40,7 @@ class InstallSchema implements InstallSchemaInterface
     {
         $setup->startSetup();
 
-        $tableName = PostSetup::ENTITY_TYPE_CODE;
+        $tableName = PostSetup::ENTITY_TABLE_CODE;
         /**
          * Create entity Table
          */
@@ -101,7 +101,7 @@ class InstallSchema implements InstallSchemaInterface
 
         /** @var \OAG\Blog\Setup\EavTablesSetup $eavTablesSetup */
         $eavTablesSetup = $this->eavTablesSetupFactory->create(['setup' => $setup]);
-        $eavTablesSetup->createEavTables(PostSetup::ENTITY_TYPE_CODE);
+        $eavTablesSetup->createEavTables(PostSetup::ENTITY_TABLE_CODE);
 
         $setup->endSetup();
     }

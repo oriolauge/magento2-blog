@@ -2,13 +2,16 @@
     $post = $block->getPost();
     $postUrl = $escaper->escapeUrl($post->getUrl());
     $postTitle = $escaper->escapeHtml($post->getTitle());
+    $listImage = $post->getListImageUrl();
 ?>
 <div class="post-item-wraper">
-    <div class="image-container">
-        <a href="<?= $postUrl ?>" title="<?= $escaper->escapeHtml($post->getListImageAlt()); ?>">
-            <div class="image-background" style="background-image: url(<?= $post->getListImageUrl() ?>)"></div>
-        </a>
-    </div>
+    <?php if ($listImage): ?>
+        <div class="image-container">
+            <a href="<?= $postUrl ?>" title="<?= $escaper->escapeHtml($post->getListImageAlt()); ?>">
+                <div class="image-background" style="background-image: url(<?= $listImage ?>)"></div>
+            </a>
+        </div>
+    <?php endif; ?>
     <div class="title">
         <h2><a href="<?= $postUrl ?>" title="<?= $postTitle; ?>">
             <?= $postTitle ?>
@@ -17,6 +20,7 @@
             <?= $this->getPublishedAtHtml(); ?>
         </div>
     </div>
-
-    <?= $post->getShortContent(); ?>
+    <div class="short-content">
+        <?= $post->getShortContent(); ?>
+    </div>
 </div>

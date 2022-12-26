@@ -38,7 +38,7 @@
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="OAG\Blog\Api\Data\PostInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="string">oag_blog_post</item> <!-- todo: better name: oag_blog_post_entity -->
+                    <item name="entityTableName" xsi:type="string">oag_blog_post_entity</item>
                     <item name="eavEntityType" xsi:type="string">oag_blog_post</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
