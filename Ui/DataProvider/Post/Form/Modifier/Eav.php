@@ -738,7 +738,6 @@ class Eav implements ModifierInterface
                 $this->newPost = $this->postRepository->createEmptyPost();
 
                 $data = $this->session->getFormData(true);
-                //var_dump($data); // die("sdsad");
                 if (!empty($data)) {
                     $this->newPost->addData($data);
                 }
