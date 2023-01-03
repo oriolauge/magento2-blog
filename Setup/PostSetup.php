@@ -253,7 +253,7 @@ class PostSetup extends EavSetup
             'default' => '',
             'unique' => false,
             'sort_order' => '20',
-            'note' => '',
+            'note' => 'Leave blank to use Title by default.',
             'visible' => '1',
             'wysiwyg_enabled' => '0',
         ];
