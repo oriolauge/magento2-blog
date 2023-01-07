@@ -45,3 +45,7 @@
 "Leave blank to use Meta Title by default.","Deixa en blanc per utilitzar el Meta títol de manera predeterminada."
 "Leave blank to use Meta Description by default.","Deixa en blanc per utilitzar el Meta descripció de manera predeterminada."
 "Leave blank to use Image by default.","Deixa en blanc per utilitzar la Imatge de manera predeterminada."
+"If is empty, Blog title will be displayed","Si està buit, es mostrarà el títol del blog"
+"E.g.: ""blog"" will make the blog accessible from mystore.com/blog","Ex.: ""blog"" farà que el bloc sigui accessible des de lamevabotiga.com/blog"
+"E.g.: "".html"" will make all blog pages accessible from mystore.com/{blog_route}/post-identifier.html or mystore.com/{blog_route}.html","Ex.: "".html"" farà que les pàgines del blog siguin accesibles des de lamevabotiga.com/{ruta_blog}/identificador-post.html o lamevabotiga.com/{ruta_blog}.html"
+"Blog Route","Ruta del blog"

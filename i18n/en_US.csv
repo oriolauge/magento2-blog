@@ -45,3 +45,7 @@
 "Leave blank to use Meta Title by default.","Leave blank to use Meta Title by default."
 "Leave blank to use Meta Description by default.","Leave blank to use Meta Description by default."
 "Leave blank to use Image by default.","Leave blank to use Image by default."
+"If is empty, Blog title will be displayed","If is empty, Blog title will be displayed"
+"E.g.: ""blog"" will make the blog accessible from mystore.com/blog","E.g.: ""blog"" will make the blog accessible from mystore.com/blog"
+"E.g.: "".html"" will make all blog pages accessible from mystore.com/{blog_route}/post-identifier.html or mystore.com/{blog_route}.html","E.g.: "".html"" will make all blog pages accessible from mystore.com/{blog_route}/post-identifier.html or mystore.com/{blog_route}.html"
+"Blog Route","Blog Route"
