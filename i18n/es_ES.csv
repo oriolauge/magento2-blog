@@ -45,3 +45,7 @@
 "Leave blank to use Meta Title by default.","Déjelo en blanco para usar Meta Título de forma predeterminada."
 "Leave blank to use Meta Description by default.","Déjelo en blanco para usar Meta Descripción de forma predeterminada."
 "Leave blank to use Image by default.","Déjelo en blanco para usar la Imagen de forma predeterminada."
+"If is empty, Blog title will be displayed","Si está vacío, se mostrará el título del blog"
+"E.g.: ""blog"" will make the blog accessible from mystore.com/blog","Ej.: ""blog"" hará que el blog sea accesible desde mitienda.com/blog"
+"E.g.: "".html"" will make all blog pages accessible from mystore.com/{blog_route}/post-identifier.html or mystore.com/{blog_route}.html","Ej.: "".html"" hará que las páginas del blog sean accesibles desde mitienda.com/{ruta_blog}/identificador-post.html o mitienda.com/{ruta_blog}.html"
+"Blog Route","Rutal del blog"
