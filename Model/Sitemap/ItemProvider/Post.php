@@ -27,11 +27,6 @@ class Post implements ItemProviderInterface
     protected $config;
 
     /**
-     * @var array
-     */
-    protected $sitemapItems = [];
-
-    /**
      * Init dependencies
      *
      * @param SitemapItemFactory $itemFactory
@@ -58,17 +53,18 @@ class Post implements ItemProviderInterface
      */
     public function getItems($storeId): array
     {
+        $sitemapItems = [];
         if (!$this->config->isExtensionEnabled($storeId)
             || !$this->config->isSitemapPostEnabled($storeId)
         ) {
-            return $this->sitemapItems;
+            return $sitemapItems;
         }
         
         $postListCollection = $this->listCollection->getPostListCollection();
         $postChangeFreq = $this->getChangeFrequency($storeId);
         $postPriority = $this->getPriority($storeId);
         foreach ($postListCollection as $post) {
-            $this->sitemapItems[] = $this->itemFactory->create(
+            $sitemapItems[] = $this->itemFactory->create(
                 [
                     'url' => $post->getRelativeUrl(),
                     'updatedAt' => $post->getUpdatedAt(),
@@ -78,7 +74,7 @@ class Post implements ItemProviderInterface
             );
         }
 
-        return $this->sitemapItems;
+        return $sitemapItems;
     }
 
     /**

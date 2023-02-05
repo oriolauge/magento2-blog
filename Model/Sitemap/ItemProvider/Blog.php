@@ -40,11 +40,6 @@ class Blog implements ItemProviderInterface
     protected $logger;
 
     /**
-     * @var array
-     */
-    protected $sitemapItems = [];
-
-    /**
      * Init dependencies
      *
      * @param SitemapItemFactory $itemFactory
@@ -72,10 +67,11 @@ class Blog implements ItemProviderInterface
      */
     public function getItems($storeId): array
     {
+        $sitemapItems = [];
         if (!$this->config->isExtensionEnabled($storeId)
             || !$this->config->isSitemapIndexPageEnabled($storeId)
         ) {
-            return $this->sitemapItems;
+            return $sitemapItems;
         }
 
         $itemFactoryParams = [
@@ -106,11 +102,11 @@ class Blog implements ItemProviderInterface
             }
         }
 
-        $this->sitemapItems[] = $this->itemFactory->create(
+        $sitemapItems[] = $this->itemFactory->create(
             $itemFactoryParams
         );
 
-        return $this->sitemapItems;
+        return $sitemapItems;
     }
 
     /**
