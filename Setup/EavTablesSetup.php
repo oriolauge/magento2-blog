@@ -35,7 +35,7 @@ class EavTablesSetup
         $this->createEntityTable($entityCode, 'datetime', Table::TYPE_DATETIME);
         $this->createEntityTable($entityCode, 'decimal', Table::TYPE_DECIMAL, '12,4');
         $this->createEntityTable($entityCode, 'int', Table::TYPE_INTEGER);
-        $this->createEntityTable($entityCode, 'text', Table::TYPE_TEXT, '64k');
+        $this->createEntityTable($entityCode, 'text', Table::TYPE_TEXT, '16M');
         $this->createEntityTable($entityCode, 'varchar', Table::TYPE_TEXT, 255);
     }
 
