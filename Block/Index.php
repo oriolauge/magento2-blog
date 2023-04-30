@@ -77,6 +77,18 @@ class Index extends Template implements IdentityInterface
         }
 
         if (!$this->getData(self::KEY_SUMMARY_CMS_BLOCK_HTML)) {
+            /**
+             * If you have differents blocks with the same identifier, the blockId will be
+             * like "identifier|id"
+             *
+             * @see Magento\Cms\Model\Config\Source\Block::toOptionArray()
+             * @see Magento\Cms\Model\ResourceModel\AbstractCollection::toOptionIdArray()
+             */
+            $blockIdentifierArray = explode('|', $blockId);
+            if (!empty($blockIdentifierArray[0])) {
+                $blockId = $blockIdentifierArray[0];
+            }
+
             $html = $this->getLayout()->createBlock(
                 \Magento\Cms\Block\BlockByIdentifier::class
             )->setIdentifier(
