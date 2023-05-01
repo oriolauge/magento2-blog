@@ -185,9 +185,8 @@ class View implements HttpGetActionInterface
     protected function prepareHeaderValues(Page $resultPage, PostInterface $post)
     {
         $pageConfig = $resultPage->getConfig();
-        $metaTitle = $post->getMetaTitle();
-        $pageConfig->setMetaTitle($metaTitle);
-        $pageConfig->getTitle()->set($metaTitle);
+        $pageConfig->setMetaTitle($post->getMetaTitle());
+        $pageConfig->getTitle()->set($post->getTitle());
         $pageConfig->setKeywords($post->getMetaKeywords());
         $pageConfig->setDescription($post->getMetaDescription());
 
