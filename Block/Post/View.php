@@ -30,13 +30,15 @@ class View extends Template implements IdentityInterface
     }
 
     /**
-     * Return Main image post alt
+     * Return Main image post alt.
+     * If image post alt is empty, we will return post title
      *
      * @return string|null
      */
-    public function getMainImageAlt(): ?string
+    public function getMainImageText(): ?string
     {
-        return $this->_getData(self::POST_FIELD)->getImageAlt();
+        $text = $this->_getData(self::POST_FIELD)->getImageAlt();
+        return $text ?? $this->_getData(self::POST_FIELD)->getTitle();
     }
 
     /**

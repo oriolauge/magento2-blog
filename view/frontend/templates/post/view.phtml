@@ -1,7 +1,8 @@
 <article class="oag-post">
     <?php $mainImage = $block->getMainImage(); ?>
+    <?php $imageText = $escaper->escapeHtml($block->getMainImageText()); ?>
     <?php if ($mainImage): ?>
-        <div class="main-image"><img src="<?= $mainImage ?>" alt="<?= $escaper->escapeHtml($block->getMainImageAlt()) ?>" /></div>
+        <div class="main-image"><img src="<?= $mainImage; ?>" alt="<?= $imageText; ?>" title="<?= $imageText; ?>" /></div>
     <?php endif; ?>
     <div class="post-info-wrapper">
         <small><?= $escaper->escapeHtml(__('Published at:') . ' ' . $block->getPublishedAt()); ?></small>

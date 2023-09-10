@@ -323,9 +323,9 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     public function getListImageAlt()
     {
         if ($this->hasData(self::KEY_LIST_IMAGE_ALT)) {
-            return $this->_getData(self::KEY_LIST_IMAGE_ALT);
+            return $this->_getData(self::KEY_LIST_IMAGE_ALT) ?? $this->getTitle();
         }
-        return $this->getTitle();
+        return '';
     }
 
     /**
