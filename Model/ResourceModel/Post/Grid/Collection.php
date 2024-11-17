@@ -43,8 +43,6 @@ class Collection extends PostCollection implements SearchResultInterface
      * @param Helper                 $resourceHelper
      * @param UniversalFactory       $universalFactory
      * @param StoreManagerInterface  $storeManager
-     * @param [type]                 $eventPrefix
-     * @param [type]                 $eventObject
      * @param [type]                 $resourceModel
      * @param string                 $model
      * @param AdapterInterface|null  $connection
@@ -60,8 +58,6 @@ class Collection extends PostCollection implements SearchResultInterface
         Helper $resourceHelper,
         UniversalFactory $universalFactory,
         StoreManagerInterface $storeManager,
-        $eventPrefix,
-        $eventObject,
         $resourceModel,
         $model = 'OAG\Blog\Ui\Component\Listing\DataProvider\Document',
         AdapterInterface $connection = null
@@ -79,8 +75,6 @@ class Collection extends PostCollection implements SearchResultInterface
             $storeManager,
             $connection
         );
-        $this->_eventPrefix = $eventPrefix;
-        $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
     }
 
