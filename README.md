@@ -4,7 +4,7 @@ This module adds options to create a blog inside Magento 2 intance. Also, this b
 With this model, we get more featres like more easy to create new attributes, maintant blog content in different languages or create new SEO features like hreflangs.
 
 ## Technologies
-- Magento 2.4.3 CE
+- Magento 2.4.7-p3 CE
 - Stability: Stable Build
 
 ## Instalation guide
