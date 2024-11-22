@@ -5,7 +5,7 @@
     "require": {
         "php": "~7.3.0||~7.4.||~8.3.0",
         "magento/framework": "103.0.*",
-        "oag/module-blog-url-rewrite": "dev-feature/upgrade_to_magento_2_4_7"
+        "oag/module-blog-url-rewrite": "1.*"
     },
     "autoload": {
         "files": [
