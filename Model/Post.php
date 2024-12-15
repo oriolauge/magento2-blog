@@ -67,6 +67,11 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
     protected $previousPost = false;
 
     /**
+     * @var array|false
+     */
+    protected $allUrlKeysValues = false;
+
+    /**
      * Prefix of model events names
      *
      * @var string
@@ -194,12 +199,33 @@ class Post extends AbstractModel implements IdentityInterface, PostInterface
 
     /**
      * @inheritDoc
-     *
-     * @return void
      */
     public function getUrlKey()
     {
         return $this->_getData(self::KEY_URL_KEY);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUrlKeyByStoreId($storeId)
+    {
+        $urlKeyAttribute = $this->postAttributeRepository->get(self::KEY_URL_KEY);
+        if ($this->allUrlKeysValues === false) {
+            $this->allUrlKeysValues = $this->_getResource()->getAllStoreValues($this, $urlKeyAttribute);
+        }
+        $return = '';
+        if ($this->allUrlKeysValues) {
+            $arrayStoreIds = array_column($this->allUrlKeysValues, 'store_id');
+            $storeIdToReturn = in_array($storeId, $arrayStoreIds) ? $storeId : $this->_getResource()->getDefaultStoreId();
+            foreach ($this->allUrlKeysValues as $arrayUrlKey) {
+                if ($arrayUrlKey['store_id'] == $storeIdToReturn) {
+                    $return = $arrayUrlKey['value'];
+                    break;
+                }
+            }
+        }
+        return $return;
     }
 
     /**
