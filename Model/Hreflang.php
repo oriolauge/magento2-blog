@@ -85,8 +85,8 @@ class Hreflang
 
     /**
      * Get Blog Index Page hreflangs
-     * 
-     * return array(lang => url post)
+     *
+     * return array(lang => url index blog)
      *
      * @return array
      */
@@ -98,12 +98,12 @@ class Hreflang
             $lang = $this->config->getHreflangCode($storeId);
 
             if ($lang && $isBlogEnabledInThisStoreView) {
-                $hreflang[$lang] = $this->url->getBlogIndexUrl($storeId);
+                $hreflang[$lang] = $storeData->getBaseUrl() . $this->url->getBlogIndexRelativeUrl($storeId);
             }
 
             //if user configure more storeviews with default, we only take the first one.
             if (empty($hreflang[self::XDEFAULT]) && $this->config->isHreflangDefaultStoreView($storeId)) {
-                $hreflang[self::XDEFAULT] = $this->url->getBlogIndexUrl($storeId);
+                $hreflang[self::XDEFAULT] = $storeData->getBaseUrl() . $this->url->getBlogIndexRelativeUrl($storeId);
             }
         }
 
