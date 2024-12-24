@@ -47,10 +47,17 @@ class Url
     /**
      * Get post url
      *
-     * We add store_id param to avoid chached result if we want to get all urls from all stores
-     * This feature is used to generate hreflangs
+     * We add _scope param to return base url from differents storeview.
+     * This feature is used to generate hreflangs.
      *
-     * You can check Magento\Framework\Url->getUrl function and see cached logic
+     * We generate the url manually and not use getDirectUrl because we need to
+     * change the "scope" (store_id) to generate different urls in one request for hreflang.
+     * If you use getDirectUrl, you need to change scope (setScope function) and you cause
+     * differents bugs because last scope is cached and others urls in website will generated
+     * in different scope like current one.
+     *
+     * You can check Magento\Framework\Url->getBaseUrl and getRouteUrl to see scope
+     * logic, also, getUrl function added a final / that we don't want
      *
      * @param PostInterface $post
      * @param mixed $storeId
@@ -58,15 +65,13 @@ class Url
      */
     public function getPostUrl(PostInterface $post, $storeId = null): string
     {
-        $params = [];
+        $params = null;
         if (is_numeric($storeId)) {
-            $this->url->setScope($storeId);
-            $params['store_id'] = $storeId;
+            $params = [
+                '_scope' => $storeId
+            ];
         }
-        return $this->url->getDirectUrl(
-            $this->postUrlPathGenerator->getUrlPathWithSuffixAndBlogRoute($post, $storeId),
-            $params
-        );
+        return $this->url->getBaseUrl($params) . $this->getPostRelativeUrl($post, $storeId);
     }
 
     /**
@@ -84,31 +89,19 @@ class Url
     }
 
     /**
-     * Get main blog page
+     * Get absolute main blog page from current store view.
      *
-     * We add store_id param to avoid chached result if we want to get all urls from all stores
-     * This feature is used to generate hreflangs
-     *
-     * You can check Magento\Framework\Url->getUrl function and see cached logic
-     *
-     * @param mixed $storeId
      * @return string
      */
-    public function getBlogIndexUrl($storeId = null): string
+    public function getBlogIndexUrl(): string
     {
-        $params = [];
-        if (is_numeric($storeId)) {
-            $this->url->setScope($storeId);
-            $params['store_id'] = $storeId;
-        }
-        return $this->url->getDirectUrl(
-            $this->mainBlogUrlPathGenerator->getMainBlogUrlPathWithSuffix($storeId),
-            $params
-        );
+        return $this->url->getDirectUrl($this->getBlogIndexRelativeUrl());
     }
 
     /**
      * Get relative main blog page
+     *
+     * Currently we don't add the language code.
      *
      * @param mixed $storeId
      * @return string
